@@ -57,7 +57,7 @@ class config {
 
     function setDefaultsAndEnv($configuration, $env = false) {
         foreach($configuration as $container_name=>$container_config) {
-            $container_config['name'] = isset($container_config['name']) ? $container_config['name'] : $contianer_name;
+            $container_config['name'] = isset($container_config['name']) ? $container_config['name'] : $container_name;
             if(!isset($container_config['image'])) {
                 throw new \Exception('An image, ' . $container_name . '  must have!');
             }
