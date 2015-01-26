@@ -28,11 +28,16 @@ class yoda {
 
     function lift($env = false, $speak = true) {
         $config = $this->app['config']->configFileContents($env);
+        $setup = is_file('.yoda.setup');
         if($speak) {
             $this->speak();
         }
-        if(in_array('--force', $this->args) && is_file('.yoda.setup'))  {
+        if(in_array('--force', $this->args) && $setup)  {
             unlink('.yoda.setup');
+        }
+        if(!$setup) {
+            //If I don't see that we've already run a setup here, then we should force --loudly
+            $this->args[] = '--loudly';
         }
         $instructions = $this->app['instruct']->lift($config);
         $this->app['shell']->executeInstructions($instructions, $config, in_array('--loudly', $this->args));

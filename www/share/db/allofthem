@@ -1,0 +1,19 @@
+mongodb:
+  image: mongo
+mysqldb:
+  image: mysql
+  pull: true
+  remove: false
+  e:
+   - MYSQL_ROOT_PASSWORD=passwd
+  prompt_password:
+   passwd: "Please enter a root password: "
+  notes:
+   - Mysql is now running on port 3306.
+   - Username is root/password is what you just entered
+rethinkdb:
+  :image: dockerfile/rethinkdb
+  p:
+   - 8080:8080
+   - 28015:28015
+   - 29015:29015

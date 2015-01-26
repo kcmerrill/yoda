@@ -1,0 +1,20 @@
+docker-http:
+ image: sequenceiq/socat
+ pull: true
+ p: 2375:2375
+ v: /var/run/docker.sock:/var/run/docker.sock
+automagicproxy:
+ image: kcmerrill/automagicproxy
+ pull: dockerfile/haproxy
+ build: .
+ remove: true
+ p: 80:80
+ e: AUTOMAGIC_PORTS=9999
+ notes:
+    - AutomagicProxy is now running on port 80.
+    - More info can be found at https://registry.hub.docker.com/u/kcmerrill/automagicproxy/
+ env:
+   prod:
+        p: 1600:1600
+        notes: This is my production notes
+        e: AUTOMAGIC_PORTS=12345

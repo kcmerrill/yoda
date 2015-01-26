@@ -18,12 +18,12 @@ class shell {
         } else {
             exec($command . ($cli_output ?  '' : '>/dev/null 2>/dev/null'), $output, $results);
         }
-        if($cli_output) {
+        if(!$interactive && $cli_output) {
             echo implode("\n", $output) . PHP_EOL;
             return $success;
         }
         if(!in_array($type, array('remove','kill'))) {
-            $success = $results === 0 ? $success : false;
+            $success = $results <= 1 ? $success : false;
         }
         if($results >= 2 && !$success) {
             $this->cli->out('<red>[Do Not]</red> <white>' . $command . '</white>');

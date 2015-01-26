@@ -35,6 +35,9 @@ class instruct {
                 }
             }
             if(!$setup && $config['setup']) {
+                if(is_string($config['setup'])) {
+                    $config['setup'] = array($config['setup']);
+                }
                 foreach($config['setup'] as $command) {
                     $this->instructions['setup'][] = $command;
                 }

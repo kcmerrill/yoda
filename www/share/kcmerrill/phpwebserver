@@ -1,0 +1,7 @@
+kcmerrill/base:
+ image: kcmerrill/base
+ name: ${PWD##*/}
+ setup: mkdir www
+ p: 1251:80
+ notes: Your webserver is running on port 1251
+
