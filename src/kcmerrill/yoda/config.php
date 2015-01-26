@@ -12,8 +12,14 @@ class config {
         'd'=>true // detached mode
     );
     var $custom = array(
-        'build','pull','remove','image','env','run','notes','prompt'
+        'build','pull','remove','image','env','run','notes','prompt','prompt_password', 'success','setup'
     );
+
+    var $force_remove = false;
+
+    function __construct($force_remove = false) {
+        $this->force_remove = $force_remove;
+    }
 
     function configFileContents($env = false) {
         $config_file = getcwd() . DIRECTORY_SEPARATOR . $this->config_file;
@@ -27,8 +33,26 @@ class config {
 
     function fetchConfigFile($shared) {
         $contents = file_get_contents('http://yoda.kcmerrill.com/share/'. $shared);
-        if(!$contents) {
+        var_dump($contents);
+        if($contents === FALSE) {
             throw new \Exception('Find the .yoda file you seek I cannot.');
+        }
+        return $contents;
+    }
+
+    function saveConfigFile($shared){
+        $config_file = $this->fetchConfigFile($shared);
+        file_put_contents('.yoda', $config_file);
+    }
+
+    function seekConfigFiles($cwd) {
+        if(is_dir($cwd)){
+            $Directory = new \RecursiveDirectoryIterator($cwd, \FilesystemIterator::SKIP_DOTS);
+            $Iterator = new \RecursiveIteratorIterator($Directory);
+            $Regex = new \RegexIterator($Iterator, '/\/\\.yoda/i', \RecursiveRegexIterator::MATCH);
+            return $Regex;
+        } else {
+            return array();
         }
     }
 
@@ -39,6 +63,9 @@ class config {
                 throw new \Exception('An image, ' . $container_name . '  must have!');
             }
             $container_config = array_merge($this->defaults, $container_config);
+            if($this->force_remove) {
+                $container_config['remove'] = true;
+            }
             if(isset($container_config['env'][$env])) {
                 $container_config = array_merge($container_config, $container_config['env'][$env]);
             }

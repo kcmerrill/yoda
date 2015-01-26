@@ -4,7 +4,6 @@ require_once __DIR__.'/../vendor/autoload.php';
 $app = new Silex\Application();
 
 $app->get('/', function() use ($app) {
-    return 'hello world';
 });
 
 $app->get('/share/{config}', function ($config) use ($app) {
@@ -20,7 +19,7 @@ function fetch_config($yoda_file){
     if(file_exists('../share/' . $yoda_file)) {
         return file_get_contents('../share/' . $yoda_file);
     } else {
-        return 'Find the .yoda file you seek I cannot.';
+        exit;
     }
 }
 

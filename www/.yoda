@@ -4,6 +4,6 @@ yoda:
   v:
    - $PWD:/var/www/html
   p:
-   - 1200:80
+   - 1250:80
   remove: true
-  notes: Yoda is now running @http://<ip>:1200
+  notes: Yoda is now running @http://<ip>:1250

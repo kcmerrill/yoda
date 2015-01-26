@@ -1,5 +1,4 @@
 <?php
-
 namespace kcmerrill\yoda;
 
 class docker {
@@ -20,6 +19,9 @@ class docker {
     }
     function remove($container_name) {
         return "docker rm -f {$container_name}";
+    }
+    function exec($container_name) {
+        return "docker exec -t -i {$container_name} bash";
     }
     function run($image, $options = array()){
         $options = is_array($options) ? $options : array();
