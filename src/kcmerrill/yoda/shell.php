@@ -11,16 +11,16 @@ class shell {
         passthru($command, $results);
     }
 
-    function execute($command, $interactive, $ignore_cli = false, $success = true) {
+    function execute($command, $interactive, $cli_output = false, $success = true) {
         $output = $results = false;
         if($interactive){
             passthru($command, $results);
         } else {
-            exec($command . ($type == 'prompt' ?  '' : '>/dev/null 2>/dev/null'), $output, $results);
+            exec($command . ($cli_output ?  '' : '>/dev/null 2>/dev/null'), $output, $results);
         }
-        if($type == 'prompt') {
+        if($cli_output) {
             echo implode("\n", $output) . PHP_EOL;
-            continue;
+            return $success;
         }
         if(!in_array($type, array('remove','kill'))) {
             $success = $results === 0 ? $success : false;
@@ -51,7 +51,7 @@ class shell {
                 if(isset($configuration['success'])) {
                     $configuration['success'] = is_string($configuration['success']) ? array($configuration['success']) : $configuration['success'];
                     foreach($configuration['success'] as $command) {
-                       $success = $this->execute($command, $interactive, true);
+                       $success = $this->execute($command, $interactive);
                     }
                 }
                 if(isset($configuration['notes'])){

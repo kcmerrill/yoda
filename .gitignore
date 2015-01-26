@@ -2,3 +2,5 @@ composer.phar
 composer.lock
 yoda.setup
 vendor/
+
+*.setup

@@ -33,7 +33,6 @@ class config {
 
     function fetchConfigFile($shared) {
         $contents = file_get_contents('http://yoda.kcmerrill.com/share/'. $shared);
-        var_dump($contents);
         if($contents === FALSE) {
             throw new \Exception('Find the .yoda file you seek I cannot.');
         }
@@ -49,7 +48,7 @@ class config {
         if(is_dir($cwd)){
             $Directory = new \RecursiveDirectoryIterator($cwd, \FilesystemIterator::SKIP_DOTS);
             $Iterator = new \RecursiveIteratorIterator($Directory);
-            $Regex = new \RegexIterator($Iterator, '/\/\\.yoda/i', \RecursiveRegexIterator::MATCH);
+            $Regex = new \RegexIterator($Iterator, '/\/\\.yoda$/i', \RecursiveRegexIterator::MATCH);
             return $Regex;
         } else {
             return array();
