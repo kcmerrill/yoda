@@ -1,0 +1,14 @@
+#!/usr/bin/php
+<?php
+/*
+ ::\`--._,'.::.`._.--'/::     Do or do not.
+ ::::.  ` __::__ '  .::::    There is no try.
+ ::::::-:.`'..`'.:-::::::
+ ::::::::\ `--' /::::::::              -Yoda
+
+ Yoda is a really simplistic approach to raising docker containers.
+*/
+
+require_once __DIR__ . '/registry.php';
+
+$app['yoda'];

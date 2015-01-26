@@ -1,0 +1,15 @@
+{
+    "name": "kcmerrill/yoda",
+    "description": "Docker made easy. Let the little man do the heavy lifting",
+    "require": {
+        "php": ">=5.5.0",
+        "symfony/yaml": "3.0.*@dev",
+        "kcmerrill/events": "dev-master",
+        "kcmerrill/config": "dev-master",
+        "pimple/pimple": "3.0.*@dev",
+        "league/climate": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {"kcmerrill": "src/"}
+     }
+}
