@@ -16,4 +16,6 @@ kcmerrill/base:
  name: ${PWD##*/}
  setup: mkdir www
  p: 1251:80
+ v:
+  - $PWD:/var/www/html
  notes: Your webserver is running on port 1251
