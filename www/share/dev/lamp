@@ -2,7 +2,7 @@ mysqldb:
   image: mysql
   pull: true
   remove: false
-  name: ${PWD##*/}
+  name: mysql_${PWD##*/}
   e:
    - MYSQL_ROOT_PASSWORD=passwd
   prompt_password:
@@ -10,3 +10,10 @@ mysqldb:
   notes:
    - MySQL is now running on port 3306.
    - Remember what you used as your password!
+kcmerrill/base:
+ image: kcmerrill/base
+ remove: true
+ name: ${PWD##*/}
+ setup: mkdir www
+ p: 1251:80
+ notes: Your webserver is running on port 1251

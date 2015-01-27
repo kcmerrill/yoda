@@ -45,7 +45,8 @@ class shell {
         $success = true;
         foreach($instructions as $type=>$commands) {
             foreach($commands as $command) {
-                $success = $this->execute($command, $interactive, in_array($type, array('prompt','prompt_password','setup','success')), $success);
+                $interactive_type = in_array($type, array('prompt','prompt_password','setup','success'));
+                $success = $this->execute($command, $interactive || $interactive_type, $interactive_type, $success);
             }
         }
         if($success) {
