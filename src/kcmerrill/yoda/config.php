@@ -9,7 +9,13 @@ class config {
         'build'=>false, // _do not_ build by default
         'pull'=>false, // _do not_ pull by default
         'remove'=>false, // _do not_ remove by default
-        'd'=>true // detached mode
+        'd'=>true, // detached mode
+        //No steps required by default
+        'prompt'=>array(),
+        'prompt_password'=>array(),
+        'setup'=>array(),
+        'setup_prompt'=>array(),
+        'success'=>array()
     );
     var $custom = array(
         'build','pull','remove','image','env','run','notes','prompt','prompt_password', 'success','setup'

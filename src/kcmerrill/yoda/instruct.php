@@ -9,6 +9,7 @@ class instruct {
         $this->instructions = array(
             'prompt'=>array(),
             'setup'=>array(),
+            'setup_prompt'=>array(),
             'pull'=>array(),
             'build'=>array(),
             'kill'=>array(),

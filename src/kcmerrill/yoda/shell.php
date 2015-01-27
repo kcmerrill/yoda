@@ -11,20 +11,22 @@ class shell {
         passthru($command, $results);
     }
 
-    function execute($command, $interactive, $cli_output = false, $success = true) {
+    function execute($command, $interactive, $ignore_yoda_response = false, $success = true) {
         $output = $results = false;
+        //true,false
         if($interactive){
             passthru($command, $results);
         } else {
-            exec($command . ($cli_output ?  '' : '>/dev/null 2>/dev/null'), $output, $results);
+            exec($command . ($interactive ?  '' : '>/dev/null 2>/dev/null'), $output, $results);
         }
-        if(!$interactive && $cli_output) {
-            echo implode("\n", $output) . PHP_EOL;
+
+        //Useful for prompts, etc
+        if($ignore_yoda_response) {
             return $success;
         }
-        if(!in_array($type, array('remove','kill'))) {
-            $success = $results <= 1 ? $success : false;
-        }
+
+        $success = $results <= 1 ? $success : false;
+
         if($results >= 2 && !$success) {
             $this->cli->out('<red>[Do Not]</red> <white>' . $command . '</white>');
         } else if($results >= 1) {
@@ -51,7 +53,7 @@ class shell {
                 if(isset($configuration['success'])) {
                     $configuration['success'] = is_string($configuration['success']) ? array($configuration['success']) : $configuration['success'];
                     foreach($configuration['success'] as $command) {
-                       $success = $this->execute($command, $interactive);
+                       $success = $this->execute($command, $interactive, true);
                     }
                 }
                 if(isset($configuration['notes'])){

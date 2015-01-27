@@ -42,5 +42,5 @@ $app['shell'] = $app->factory(function($c) {
 });
 
 $app['yoda'] = function($c) use($argv) {
-    return new kcmerrill\yoda($c, $argv[1], $argv[2], $argv);
+    return new kcmerrill\yoda($c, isset($argv[1]) ? $argv[1] : 'version', isset($argv[2]) ? $argv[2] : false, $argv);
 };

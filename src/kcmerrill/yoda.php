@@ -7,6 +7,7 @@ class yoda {
     var $modifier;
     var $version = 0.01;
     var $args;
+    var $spoke = false;
 
     function __construct($app, $action = false, $modifier = false, $args = array()) {
         $this->app = $app;
@@ -37,7 +38,8 @@ class yoda {
         }
         if(!$setup) {
             //If I don't see that we've already run a setup here, then we should force --loudly
-            $this->args[] = '--loudly';
+            //I'm actually not a fan of this. Let me try it out without forcing loudly
+            //$this->args[] = '--loudly';
         }
         $instructions = $this->app['instruct']->lift($config);
         $this->app['shell']->executeInstructions($instructions, $config, in_array('--loudly', $this->args));
@@ -77,6 +79,9 @@ class yoda {
         $this->app['cli']->out('v' . $this->version);
     }
     function speak() {
+        if($this->spoke) {
+            return true;
+        }
 $this->app['cli']->out("
            <green>.--.</green>
    <green>\`--._,'.::.`._.--'/</green>       <white>Do or do not.</white>
@@ -84,6 +89,7 @@ $this->app['cli']->out("
        <green>- .`'..`'. -</green>
          <green>\ `--' /</green>                      -<green>Yoda</green>\n");
 
+        $this->spoke = true;
     }
     function __call($method, $params) {
         throw new \Exception($method . '? I know not what you mean.');
