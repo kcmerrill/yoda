@@ -11,11 +11,6 @@ Yoda is a command line tool used to interact with docker projects/containers bas
 - Functionality for different environments built in(no need for additional config files based on env)
 - A few more!!!
 
-## Why create yoda when fig/compose exists? 
-A couple reasons. Yoda is a pet project of mine. For a while now I've wanted to build an app in various languages(PHP, Go, Python) and figured, why not? This prototype is written in PHP(my bread and butter) but there should be more versions coming soon! Again, it's a learning experience for me too.
-
-There were also some features that I felt were missing from fig that I personally would use or would've like to have seen(see above).
-
 ## Installation ##
 1. [Install Composer](http://getcomposer.org)
 2. `cd yoda_folder/ && composer.phar install`
