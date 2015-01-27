@@ -7,7 +7,7 @@ class shell {
         $this->cli = $cli;
     }
 
-    function executeCommandForeground($cmd) {
+    function executeCommandForeground($command) {
         passthru($command, $results);
     }
 
