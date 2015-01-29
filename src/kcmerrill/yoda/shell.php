@@ -11,13 +11,13 @@ class shell {
         passthru($command, $results);
     }
 
-    function execute($command, $interactive, $ignore_yoda_response = false, $success = true) {
+    function execute($command, $interactive = false, $ignore_yoda_response = false, $do_not_fail = false , $success = true) {
         $output = $results = false;
-        //true,false
+
         if($interactive){
             passthru($command, $results);
         } else {
-            exec($command . ($interactive ?  '' : '>/dev/null 2>/dev/null'), $output, $results);
+            exec($command . ($interactive ?  '' : ' &> /dev/null'), $output, $results);
         }
 
         //Useful for prompts, etc
@@ -25,9 +25,13 @@ class shell {
             return $success;
         }
 
-        $success = $results <= 1 ? $success : false;
+        if(!$do_not_fail) {
+            $success = $results <= 1 ? $success : false;
+        }
 
-        if($results >= 2 && !$success) {
+        //Don't show the user the command, just in case
+        $command = str_replace('&> /dev/null', '', $command);
+        if($results >= 1 && !$do_not_fail) {
             $this->cli->out('<red>[Do Not]</red> <white>' . $command . '</white>');
         } else if($results >= 1) {
             $this->cli->out('<yellow>[Worry you should not]</yellow> <white>' . $command . '</white>');
@@ -41,12 +45,18 @@ class shell {
         return $success;
     }
 
-    function executeInstructions($instructions, $config, $interactive = false) {
+    function executeInstructions($instructions, $interactive) {
+        foreach($instructions as $command) {
+            $this->execute($command, $interactive);
+        }
+    }
+    function executeLiftInstructions($instructions, $config, $interactive = false) {
         $success = true;
         foreach($instructions as $type=>$commands) {
             foreach($commands as $command) {
                 $interactive_type = in_array($type, array('prompt','prompt_password','setup','success'));
-                $success = $this->execute($command, $interactive || $interactive_type, $interactive_type, $success);
+                $do_not_fail = in_array($type, array('kill','remove'));
+                $success = $this->execute($command, $interactive || $interactive_type, $interactive_type, $do_not_fail, $success);
             }
         }
         if($success) {

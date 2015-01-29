@@ -20,6 +20,33 @@ class instruct {
         );
     }
 
+    function control($containers_configuration, $specific_container = false) {
+        $control = array();
+        if($specific_container && isset($containers_configuration[$specific_container])) {
+           $config = $containers_configuration[$specific_container];
+           $config['control'] = is_array($config['control']) ? $config['control'] : array('bash');
+           foreach($config['control'] as $command) {
+                $control[] = $this->docker->exec($config['name'], $command);
+           }
+        } else {
+            $default_behavior = true;
+            foreach($containers_configuration as $container=>$container_config) {
+                if(is_array($container_config['control'])){
+                    foreach($container_config['control'] as $command) {
+                        $control[] = $this->docker->exec($container_config['name'], $command);
+                    }
+                }
+            }
+            if($default_behavior) {
+                $config = end($containers_configuration);
+                $config['control'] = is_array($config['control']) ? $config['control'] : array('bash');
+                foreach($config['control'] as $command) {
+                    $control[] = $this->docker->exec($container_config['name'], $command);
+                }
+            }
+        }
+        return $control;
+    }
     function lift($containers_configuration) {
        $setup = is_file('.yoda.setup');
        foreach($containers_configuration as $container=>$config) {

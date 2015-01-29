@@ -5,11 +5,14 @@ class docker {
     function stop($container_name) {
         return "docker stop {$container_name}";
     }
-    function start($container_name) {
-        return "docker start {$container_name}";
+    function start($container_name, $silent = true) {
+        return "docker start {$container_name} &> /dev/null";
     }
     function kill($container_name) {
         return "docker kill {$container_name}";
+    }
+    function killall() {
+        return 'docker kill $(docker ps -a -q)';
     }
     function pull($image) {
         return "docker pull {$image}";
@@ -20,8 +23,8 @@ class docker {
     function remove($container_name) {
         return "docker rm -f {$container_name}";
     }
-    function exec($container_name) {
-        return "docker exec -t -i {$container_name} bash";
+    function exec($container_name, $command = 'bash') {
+        return "docker exec -t -i {$container_name} {$command}";
     }
     function run($image, $options = array()){
         $options = is_array($options) ? $options : array();

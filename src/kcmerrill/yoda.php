@@ -36,14 +36,9 @@ class yoda {
         if(in_array('--force', $this->args) && $setup)  {
             unlink('.yoda.setup');
         }
-        if(!$setup) {
-            //If I don't see that we've already run a setup here, then we should force --loudly
-            //I'm actually not a fan of this. Let me try it out without forcing loudly
-            //$this->args[] = '--loudly';
-        }
         $instructions = $this->app['instruct']->lift($config);
-        $this->app['shell']->executeInstructions($instructions, $config, in_array('--loudly', $this->args));
-        file_put_contents('.yoda.setup', date("F j, Y, g:i a"));
+        $this->app['shell']->executeLiftInstructions($instructions, $config, in_array('--loudly', $this->args));
+        touch('.yoda.setup');
     }
 
     function seek() {
@@ -56,10 +51,12 @@ class yoda {
     }
     function control() {
         $this->speak();
+        while(dirname(getcwd()) != '/' && !is_file('.yoda')) {
+           chdir(dirname(getcwd()));
+        }
         $config = $this->app['config']->configFileContents();
-        $config = end($config);
-        $this->app['shell']->executeCommandForeground($this->app['docker']->exec($config['name']));
-
+        $instructions = $this->app['instruct']->control($config, $this->modifier);
+        $this->app['shell']->executeInstructions($instructions, true);
     }
     function summon() {
         $this->speak();
@@ -68,7 +65,9 @@ class yoda {
         if(is_dir($folder) && !in_array('--force', $this->args)) {
             throw new \Exception($folder . ' exists! Use the force(--force) and try again, you should.  Yes, hmmm.');
         } else {
-            @mkdir($folder, 0700, true);
+            if(!is_file($folder)) {
+                mkdir($folder, 0700, true);
+            }
             chdir($folder);
             $this->app['config']->saveConfigFile($this->modifier);
             new yoda($this->app, 'lift_from_seek', false , $this->args);
@@ -77,6 +76,11 @@ class yoda {
     function version($modifier = false) {
         $this->speak();
         $this->app['cli']->out('v' . $this->version);
+    }
+
+    function kill($modifier = false) {
+        $this->speak();
+        $this->app['shell']->execute($this->app['docker']->killall(), in_array('--loudly', $this->args));
     }
     function speak() {
         if($this->spoke) {

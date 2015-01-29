@@ -15,10 +15,11 @@ class config {
         'prompt_password'=>array(),
         'setup'=>array(),
         'setup_prompt'=>array(),
-        'success'=>array()
+        'success'=>array(),
+        'control'=>false
     );
     var $custom = array(
-        'build','pull','remove','image','env','run','notes','prompt','prompt_password', 'success','setup'
+        'build','pull','remove','image','env','run','notes','prompt','prompt_password', 'success','setup','control'
     );
 
     var $force_remove = false;
