@@ -14,6 +14,10 @@ class yoda {
         $this->action = $action;
         $this->modifier = $modifier;
         $this->args = is_array($args) ? $args : array();
+        //Make sure yoda can start anywhere beneath the master folder
+        while(dirname(getcwd()) != '/' && !is_file('.yoda')) {
+           chdir(dirname(getcwd()));
+        }
         try {
             $this->$action($modifier);
         } catch (\Exception $e) {
@@ -51,9 +55,6 @@ class yoda {
     }
     function control() {
         $this->speak();
-        while(dirname(getcwd()) != '/' && !is_file('.yoda')) {
-           chdir(dirname(getcwd()));
-        }
         $config = $this->app['config']->configFileContents();
         $instructions = $this->app['instruct']->control($config, $this->modifier);
         $this->app['shell']->executeInstructions($instructions, true);
