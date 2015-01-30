@@ -24,6 +24,7 @@ I suppose it's a little long for a "brief" overview, but a brief overview of wha
 [![Yoda Overview](https://raw.githubusercontent.com/kcmerrill/yoda/master/screenshots/yoda_lift_config.png)](https://www.youtube.com/watch?v=jBvG8wOmAdU)
 
 ## Screenshots ##
-![Yoda Screenshot #1](https://raw.githubusercontent.com/kcmerrill/yoda/master/screenshots/3__tmux.png)
-![Yoda Screenshot #2](https://raw.githubusercontent.com/kcmerrill/yoda/master/screenshots/3__tmux_and_screenshots.png)
-![Yoda Screenshot #3](https://raw.githubusercontent.com/kcmerrill/yoda/master/screenshots/yoda_lift_config.png)
+![Yoda Screenshot #1](https://raw.githubusercontent.com/kcmerrill/yoda/master/screenshots/yoda_lift_config.png)
+![Yoda Screenshot #2](https://raw.githubusercontent.com/kcmerrill/yoda/master/screenshots/3__tmux.png)
+![Yoda Screenshot #3](https://raw.githubusercontent.com/kcmerrill/yoda/master/screenshots/3__tmux_and_screenshots.png)
+
