@@ -28,6 +28,13 @@ class config {
         $this->force_remove = $force_remove;
     }
 
+    function smartConfig(){
+        //Make sure yoda can start anywhere beneath the master folder
+        while(dirname(getcwd()) != '/' && !is_file('.yoda')) {
+           chdir(dirname(getcwd()));
+        }
+    }
+
     function configFileContents($env = false) {
         $config_file = getcwd() . DIRECTORY_SEPARATOR . $this->config_file;
         if(!is_file($config_file)) {

@@ -14,11 +14,7 @@ class yoda {
         $this->action = $action;
         $this->modifier = $modifier;
         $this->args = is_array($args) ? $args : array();
-        //Make sure yoda can start anywhere beneath the master folder
-        while(dirname(getcwd()) != '/' && !is_file('.yoda')) {
-           chdir(dirname(getcwd()));
-        }
-        try {
+       try {
             $this->$action($modifier);
         } catch (\Exception $e) {
             $this->speak();
@@ -32,6 +28,7 @@ class yoda {
     }
 
     function lift($env = false, $speak = true) {
+        $this->app['config']->smartConfig();
         $config = $this->app['config']->configFileContents($env);
         $setup = is_file('.yoda.setup');
         if($speak) {
@@ -55,6 +52,7 @@ class yoda {
     }
     function control() {
         $this->speak();
+        $this->app['config']->smartConfig();
         $config = $this->app['config']->configFileContents();
         $instructions = $this->app['instruct']->control($config, $this->modifier);
         $this->app['shell']->executeInstructions($instructions, true);
