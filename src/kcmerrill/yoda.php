@@ -87,10 +87,10 @@ class yoda {
         }
 $this->app['cli']->out("
            <green>.--.</green>
-   <green>\`--._,'.::.`._.--'/</green>       <white>Do or do not.</white>
-     <green>.  ` __::__ '  .</green>        <white>There is no try.</white>
+   <green>\`--._,'.::.`._.--'/</green>       <green>[Do]</green> <white>||</white> <red>[Do Not]</red>
+     <green>.  ` __::__ '  .</green>          <white>There is </white>!<yellow>[Try]</yellow>
        <green>- .`'..`'. -</green>
-         <green>\ `--' /</green>                      -<green>Yoda</green>\n");
+         <green>\ `--' /</green>                      <white>-</white><green>Yoda</green>\n");
 
         $this->spoke = true;
     }
