@@ -33,6 +33,7 @@ class shell {
         $command = str_replace('&> /dev/null', '', $command);
         if($results >= 1 && !$do_not_fail) {
             $this->cli->out('<red>[Do Not]</red> <white>' . $command . '</white>');
+            exit(1);
         } else if($results >= 1) {
             $this->cli->out('<yellow>[Worry you should not]</yellow> <white>' . $command . '</white>');
         }else {

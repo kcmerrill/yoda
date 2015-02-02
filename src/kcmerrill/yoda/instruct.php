@@ -53,7 +53,9 @@ class instruct {
             if(!$setup && $config['prompt']) {
                 foreach($config['prompt'] as $read=>$question) {
                     $this->instructions['prompt'][] = 'echo "' . $question . '"';
+                    $this->instructions['prompt'][] = 'stty -echo';
                     $this->instructions['prompt'][] = 'read ' . $read;
+                    $this->instructions['prompt'][] = 'stty echo';
                 }
             }
             if(!$setup && $config['prompt_password']) {
