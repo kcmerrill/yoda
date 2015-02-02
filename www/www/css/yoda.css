@@ -1,0 +1,65 @@
+html {
+    height:100%;
+    width:100%;
+}
+
+body{
+    width:100%;
+    height:100%;
+    margin:0px;
+    padding:0px;
+    background-color:black;
+    color:white;
+}
+
+.yoda-bg {
+    background-color:black;
+    background-image:url('../images/yoda_bg.jpg');
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    height:100%;
+    width:100%;
+    color:white;
+    opacity:.4;
+}
+.custom-font {
+    font-family: 'Raleway', sans-serif;
+}
+.red-font {
+    color:red;
+}
+.green-font {
+    color:#389F33;
+}
+.white-font {
+    color:white;
+}
+.content {
+    position:fixed;
+    top:0;
+    left:0;
+    height:100%;
+    width:40%;
+    padding-top:30px;
+    padding-left:30px;
+    overflow-y: auto;
+}
+.content .header {
+    width:750px;
+    height:100%;
+}
+
+.content img {
+    width:150px;
+}
+.content h1 {
+    font-size:60px;
+    margin:0px;
+    padding:0px;
+}
+
+.content ul li {
+    padding-bottom:10px;
+}

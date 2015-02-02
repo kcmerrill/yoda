@@ -4,7 +4,7 @@ require_once __DIR__.'/../vendor/autoload.php';
 $app = new Silex\Application();
 
 $app->get('/', function() use ($app) {
-    return 'Yoda!';
+    return file_get_contents('views/index.html');
 });
 
 $app->get('/share/{config}', function ($config) use ($app) {
