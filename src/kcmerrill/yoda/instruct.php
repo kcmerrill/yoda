@@ -30,13 +30,6 @@ class instruct {
            }
         } else {
             $default_behavior = true;
-            foreach($containers_configuration as $container=>$container_config) {
-                if(is_array($container_config['control'])){
-                    foreach($container_config['control'] as $command) {
-                        $control[] = $this->docker->exec($container_config['name'], $command);
-                    }
-                }
-            }
             if($default_behavior) {
                 $config = end($containers_configuration);
                 $config['control'] = is_array($config['control']) ? $config['control'] : array('bash');
@@ -53,15 +46,15 @@ class instruct {
             if(!$setup && $config['prompt']) {
                 foreach($config['prompt'] as $read=>$question) {
                     $this->instructions['prompt'][] = 'echo "' . $question . '"';
-                    $this->instructions['prompt'][] = 'stty -echo';
                     $this->instructions['prompt'][] = 'read ' . $read;
-                    $this->instructions['prompt'][] = 'stty echo';
                 }
             }
             if(!$setup && $config['prompt_password']) {
                 foreach($config['prompt_password'] as $read=>$question) {
                     $this->instructions['prompt'][] = 'echo "' . $question . '"';
-                    $this->instructions['prompt'][] = 'read -s ' . $read;
+                    $this->instructions['prompt'][] = 'stty -echo';
+                    $this->instructions['prompt'][] = 'read ' . $read;
+                    $this->instructions['prompt'][] = 'stty echo';
                 }
             }
             if(!$setup && $config['setup']) {

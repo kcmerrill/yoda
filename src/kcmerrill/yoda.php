@@ -65,7 +65,7 @@ class yoda {
             throw new \Exception($folder . ' exists! Use the force(--force) and try again, you should.  Yes, hmmm.');
         } else {
             if(!is_file($folder)) {
-                mkdir($folder, 0700, true);
+                @mkdir($folder, 0755, true);
             }
             chdir($folder);
             $this->app['config']->saveConfigFile($this->modifier);

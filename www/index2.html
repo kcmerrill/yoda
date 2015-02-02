@@ -1,0 +1,34 @@
+<html>
+    <head>
+        <title>
+            Yoda - Docker made easier            
+        </title>
+        <link rel="stylesheet" type="text/css" href="css/yoda.css">
+        <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+    </head>
+    <body>
+        <div class="content">
+            <pre>
+$ yoda summon db/mysql
+
+           <span class="green-font">.--.</span>
+   <span class="green-font">\`--._,'.::.`._.--'/</span>       <span class="green-font"><b>[Do]</b></span> <span class="white-font">||</span> <span class="red-font">[Do Not]</span>.
+     <span class="green-font">.  ` __::__ '  .</span>          <span class="white-font">There is no try</span>
+       <span class="green-font">- .`'..`'. -</span>
+         <span class="green-font">\ `--' /</span>                      <span class="white-font">-</span><span class="green-font">Yoda</span>
+
+<span class="green-font">[Yoda]</span>  The name of your new project, what is, hmm?
+mysql
+<span class="green-font">[Yoda]</span> /Users/kcmerrill/Dropbox/Code/mysql/.yoda
+Please enter a MySQL root password:
+<span class="green-font">[Do]</span> docker pull mysql
+<span class="green-font">[Do]</span> docker kill ${PWD##*/}
+<span class="green-font">[Do]</span> docker rm -f ${PWD##*/}
+<span class="green-font">[Do]</span> docker run -d --name=${PWD##*/} -e MYSQL_ROOT_PASSWORD=passwd mysql
+<span class="green-font">MySQL is now running on port 3306.
+Remember what you used as your password!
+</span>
+</pre>        
+        </div>
+    </body>
+</html>
