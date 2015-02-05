@@ -1,7 +1,5 @@
 <?php
-error_reporting(E_ALL);
-require_once __DIR__.'/../vendor/autoload.php';
-$app = new Silex\Application();
+require_once __DIR__ . '/../registry.php';
 
 $app->get('/', function() use ($app) {
     return file_get_contents('views/index.html');

@@ -8,34 +8,50 @@ class yoda {
     var $version = 0.01;
     var $args;
     var $spoke = false;
-
+    var $lifted = array();
+    var $summoning = false;
     function __construct($app, $action = false, $modifier = false, $args = array()) {
         $this->app = $app;
         $this->action = $action;
         $this->modifier = $modifier;
         $this->args = is_array($args) ? $args : array();
-       try {
+        try {
             $this->$action($modifier);
-        } catch (\Exception $e) {
+         } catch (\Exception $e) {
             $this->speak();
             $this->app['cli']->out('<green>[Yoda]</green> <red>' . $e->getMessage() . '</red>');
-        }
-    }
-
-    function lift_from_seek($env = false) {
-        $this->app['cli']->out('<green>[Yoda]</green> ' . getcwd() . '/.yoda');
-        $this->lift($env, false);
+         }
     }
 
     function lift($env = false, $speak = true) {
-        $this->app['config']->smartConfig();
-        $config = $this->app['config']->configFileContents($env);
+        $original_location = getcwd();
+        $this->app['yaml']->smartConfig();
+        $config = $this->app['yaml']->configFileContents($env);
         $setup = is_file('.yoda.setup');
         if($speak) {
             $this->speak();
         }
-        if(in_array('--force', $this->args) && $setup)  {
+        if(in_array('--force', $this->args) && $setup) {
             unlink('.yoda.setup');
+        }
+        foreach($config as $container_name=>$container_config) {
+            $require = is_array($container_config['require']) ? $container_config['require'] : array($container_config['require']);
+            $required_project_folder = false;
+            foreach($require as $req) {
+                chdir('../');
+                try {
+                    $this->summon($req);
+                } catch(\Exception $e) {
+                    $this->lift($env, false);
+                }
+                chdir($original_location);
+            }
+            if(in_array($container_config['name'], $this->lifted)) {
+                unset($config[$container_name]);
+                $this->app['cli']->out('<green>[Yoda]</green><white> ' . $container_config['name'] . ' already running ... </white>');
+            } else {
+                $this->lifted[] = $container_config['name'];
+            }
         }
         $instructions = $this->app['instruct']->lift($config);
         $this->app['shell']->executeLiftInstructions($instructions, $config, in_array('--loudly', $this->args));
@@ -44,33 +60,42 @@ class yoda {
 
     function seek() {
         $this->speak();
-        $configs = $this->app['config']->seekConfigFiles(getcwd());
+        $configs = $this->app['yaml']->seekConfigFiles(getcwd());
         foreach($configs as $config) {
+            $this->app['cli']->out('<green>[Yoda]</green> <white>Found ... ' . $config . '</white>');
             chdir(dirname($config));
-            new yoda($this->app, 'lift_from_seek', $this->modifier, $this->args);
+            $this->lift($this->modifier, false, true);
         }
     }
     function control() {
         $this->speak();
-        $this->app['config']->smartConfig();
-        $config = $this->app['config']->configFileContents();
+        $this->app['yaml']->smartConfig();
+        $config = $this->app['yaml']->configFileContents($this->modifier);
         $instructions = $this->app['instruct']->control($config, $this->modifier);
         $this->app['shell']->executeInstructions($instructions, true);
     }
-    function summon() {
+    function summon($project_name) {
         $this->speak();
-        $this->app['cli']->out('<green>[Yoda] </green> The name of your new project, what is, hmm?');
-        $folder = readline();
+        $folder = $project_name;
+        if(strpos($folder, '/') === FALSE) {
+            throw new \Exception('Only summon things that are name followed by project, I can!  Yeesssssss. ' . PHP_EOL . 'Eg: yoda summon db/mysql');
+        } else {
+            list($user, $folder) = explode('/', $folder, 2);
+            $this->summoning = $folder;
+        }
         if(is_dir($folder) && !in_array('--force', $this->args)) {
-            throw new \Exception($folder . ' exists! Use the force(--force) and try again, you should.  Yes, hmmm.');
+            chdir(getcwd() . '/' . $folder);
+            $this->lift($project_name, false);
         } else {
             if(!is_file($folder)) {
                 @mkdir($folder, 0755, true);
             }
-            chdir($folder);
-            $this->app['config']->saveConfigFile($this->modifier);
-            new yoda($this->app, 'lift_from_seek', false , $this->args);
+            $repos = $this->app['config']->get('yoda.repos', array('yoda.kcmerrill.com'));
+            chdir(getcwd() . '/' . $folder);
+            $this->app['yaml']->saveConfigFile($project_name, $repos);
+            $this->lift($project_name, false);
         }
+        return $folder;
     }
     function version($modifier = false) {
         $this->speak();
