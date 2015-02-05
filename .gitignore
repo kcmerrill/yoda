@@ -2,6 +2,6 @@ composer.phar
 composer.lock
 yoda.setup
 vendor/
-
+www/share/rp*
 *.setup
 www/share/rp/*
