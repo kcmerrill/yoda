@@ -16,7 +16,10 @@ kcmerrill/base:
  image: kcmerrill/base
  remove: true
  name: ${PWD##*/}
- setup: mkdir www
+ setup: 
+   - mkdir www
+   - echo "yoda works!" > www/index.php
+   - docker exec -t -i automagicproxy /automagicproxy/bin/reload
  P: true
  v:
   - $PWD:/var/www/html
