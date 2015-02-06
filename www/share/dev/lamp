@@ -11,11 +11,15 @@ mysqldb:
    - MySQL is now running on port 3306.
    - Remember what you used as your password!
 kcmerrill/base:
+ require:
+  - kcmerrill/automagicproxy
  image: kcmerrill/base
  remove: true
  name: ${PWD##*/}
  setup: mkdir www
- p: 1251:80
+ P: true
  v:
   - $PWD:/var/www/html
- notes: Your webserver is running on port 1251
+ notes:
+  - Simply rename this root folder to be your new subdomain
+  - Your webserver is running  ${PWD##*/}.$HOSTNAME
