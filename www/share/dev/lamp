@@ -11,6 +11,8 @@ mysqldb:
    - MySQL is now running on port 3306.
    - Remember what you used as your password!
 kcmerrill/base:
+ require:
+  - kcmerrill/automagicproxy
  image: kcmerrill/base
  remove: true
  name: ${PWD##*/}
