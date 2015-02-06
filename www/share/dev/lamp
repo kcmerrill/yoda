@@ -15,7 +15,8 @@ kcmerrill/base:
  remove: true
  name: ${PWD##*/}
  setup: mkdir www
- p: 1251:80
+ P: true
  v:
   - $PWD:/var/www/html
- notes: Your webserver is running on port 1251
+ notes:
+  - Your webserver is running  ${PWD##*/}.$HOSTNAME

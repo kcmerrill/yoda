@@ -6,12 +6,10 @@ docker-http:
 automagicproxy:
  image: kcmerrill/automagicproxy
  pull: dockerfile/haproxy
- build: .
  remove: true
  p: 80:80
- e: AUTOMAGIC_PORTS=9999
  notes:
-    - AutomagicProxy is now running on port 80.
+    - AutomagicProxy is now running $HOSTNAME:80.
     - More info can be found at https://registry.hub.docker.com/u/kcmerrill/automagicproxy/
  env:
    prod:

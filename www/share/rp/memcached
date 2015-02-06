@@ -1,0 +1,3 @@
+memcached:
+    image: docker-registry.returnpath.net:443/base/base_memcached_web
+    remove: true

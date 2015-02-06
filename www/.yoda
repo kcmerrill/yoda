@@ -1,9 +1,26 @@
+docker-http:
+ image: sequenceiq/socat
+ pull: true
+ p: 2375:2375
+ v: /var/run/docker.sock:/var/run/docker.sock
+ remove: true
+automagicproxy:
+ image: kcmerrill/automagicproxy
+ p: 80:80
+ remove: true
+ notes:
+    - AutomagicProxy is now running on port 80.
+    - More info can be found at https://registry.hub.docker.com/u/kcmerrill/automagicproxy/
 yoda:
-  build: /Users/kcmerrill/Dropbox/Code/docker/base
   image: kcmerrill/base
+  P: true
   v:
    - $PWD:/var/www/html
-  p:
-   - 1250:80
   remove: true
-  notes: Yoda is now running @http://<ip>:1250
+  env:
+   access:
+    control:
+     - "tail -f /var/log/apache2/access.log"
+   error:
+    control:
+     - "tail -f /var/log/apache2/error.log"

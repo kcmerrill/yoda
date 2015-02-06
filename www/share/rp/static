@@ -1,0 +1,17 @@
+static:
+    require:
+     - kcmerrill/automagicproxy
+    build: src/.
+    image: returnpath/static
+    remove: true
+    setup:
+     - git clone -q ssh://gerrit/rp_static_web src && cd src && git submodule update -q --init --recursive
+    p: 1201:80
+    v:
+     - $PWD/src:/var/www/html
+     - $PWD/src/docker:/tmp/docker
+    e:
+     - site_name=static
+     - server_env=dev
+     - NO_ORA=true
+    notes: Static should now be available at static.$HOSTNAME

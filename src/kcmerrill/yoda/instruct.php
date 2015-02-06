@@ -16,14 +16,15 @@ class instruct {
             'remove'=>array(),
             'start'=>array(),
             'success'=>array(),
-            'run'=>array()
+            'run'=>array(),
+            'require'=>array()
         );
     }
 
-    function control($containers_configuration, $specific_container = false) {
+    function control($containers_configuration, $specific_env = false) {
         $control = array();
-        if($specific_container && isset($containers_configuration[$specific_container])) {
-           $config = $containers_configuration[$specific_container];
+        if($specific_env && isset($containers_configuration['env'][$specific_env])) {
+           $config = $containers_configuration[$specific_env];
            $config['control'] = is_array($config['control']) ? $config['control'] : array('bash');
            foreach($config['control'] as $command) {
                 $control[] = $this->docker->exec($config['name'], $command);
@@ -34,7 +35,7 @@ class instruct {
                 $config = end($containers_configuration);
                 $config['control'] = is_array($config['control']) ? $config['control'] : array('bash');
                 foreach($config['control'] as $command) {
-                    $control[] = $this->docker->exec($container_config['name'], $command);
+                    $control[] = $this->docker->exec($config['name'], $command);
                 }
             }
         }
