@@ -4,3 +4,4 @@ yoda.setup
 vendor/
 
 *.setup
+www/share/rp/*

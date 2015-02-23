@@ -32,6 +32,8 @@ class docker {
         foreach($options as $c=>$value) {
             $value = is_array($value) ? $value : array($value);
             foreach($value as $v){
+                if(is_bool($v) && $v == false)
+                    continue;
                 if(strlen($c) == 1) {
                     $run_cmd[] = is_bool($v) ? "-{$c}" : "-{$c} {$v}";
                 } else {
