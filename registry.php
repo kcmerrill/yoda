@@ -3,7 +3,11 @@
 require __DIR__ . '/vendor/autoload.php';
 
 //TODO: Before committing, uncomment this line
+<<<<<<< HEAD
 //error_reporting(0);
+=======
+error_reporting(0);
+>>>>>>> FETCH_HEAD
 
 if (!ini_get('date.timezone')){
     date_default_timezone_set('America/Denver');
