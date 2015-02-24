@@ -1,12 +1,121 @@
 <html>
     <head>
         <title>
-            Yoda - Docker made easier            
+            Yoda - Docker made easier
         </title>
+    <link href='http://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css'>
+    <link href='css/yoda.css' rel='stylesheet' type='text/css'>
+    <link href='css/bubble.css' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    </head>
     <body>
-        <center>
-        <img src="images/yoda_site.png">
-        </center>
-        <a href="https://github.com/kcmerrill/yoda"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>                
+        <div class="header">
+            <div class="menu">
+                <div class="speaking-text">Yoda</div>
+            </div>
+        </div>
+        <div class="parfait hero">
+            <div class="thoughts speaking-text">
+                <div class="green-text">Help you with Docker, I will.</div>
+                <div class="green-text">Faster, easier, lighter, it is.</div>
+                <div class="blurb-text droid-text">
+                    <div>Setup a simple YAML configuration file, and you can easily manipulate docker containers needed for your projects. </div>
+                    <div>Instead of writing bash scripts over and over ...</div>
+                    <div class="features">
+                        <div><i class="green-text fa fa-check"></i> Docker cli wrapper which means full usage of shell commands.</div>
+                        <div><i class="green-text fa fa-check"></i> All docker run commands fully available(they simply pass through if it's not a yoda keyword)</div>
+                        <div><i class="green-text fa fa-check"></i> Shareable configurations! Need a lamp setup? Need a db? We have you covered with yoda summon!</div>
+                        <div class="speaking-text blue-text">And many more ...</div>
+                    </div>
+                </div>
+            </div>
+            <img class="yoda" src="images/yoda-outline.png">
+            <img class="docker" src="images/docker.png">
+            <div class="clear"></div>
+        </div>
+        <div class="parfait green-bg">
+            <div class="compliments speaking-text">
+                <div class="title">Compliments on yoda these are.</div>
+                <div class="bubble droid-text">"Random bash scripts and 1k+ aliases are the path to the dark side. Fear leads to anger. Anger leads to hate. Hate leads to suffering."<br/><span class="from speaking-text">- Some Developer<span></div>
+                <div class="bubble droid-text">"Always pass on what you have learned."<br/><span class="from speaking-text">- Some Other Developer<span></div>
+                <div class="bubble droid-text">"Powerful you have become, the dark side I sense in you."<br/><span class="from speaking-text">- Yet Another Developer<span></div>
+                <div class="bubble droid-text">"Patience you must have, my young padwan."<br/><span class="from speaking-text">- A Wise Developer<span></div>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="parfait blue-bg">
+            <div class="configuration droid-text">
+                <div class="title speaking-text">Configuration, to study.</div>
+                <div class="intro">The configuration file is just a simple yaml file that is interpreted by yoda which it uses to build/pull/run/stop your docker containers.</div>
+                <div class="intro">Below is a contrived example that excercises all of the functionality found within yoda. We'll go line by line and explain what each key/value pair does in this sample .yoda file.</div>
+
+                <img src="images/yoda_configuration.png" class="pull-left">
+                <div class="line-by-line pull-right">
+                    <img src="images/yoda_configuration_legend.png">
+
+                    <div><span class="green-text">Line #1</span>: The container name(--name=) if a name is not specified.</div>
+                    <div><span class="green-text">Line #2-6</span>: In order for this container to run, the 4 listed projects are required. Yoda will try to "summon"(see commands below) each one of these projects first.</div>
+                    <div><span class="green-text">Line #7</span>: Prompt takes in a list in which the key will be the bash variable, and the value will be the string to be prompted to the user. You can use these variables later in your configuration!</div>
+                    <div><span class="green-text">Line #8-9</span>: the variable "bash_variable" can now be used throughout your .yoda file!</div>
+                    <div><span class="green-text">Line #10-11</span>: prompt_password is identical to prompt, except it does not show the contents of what the user typed in. Needed for db passwords for example</div>
+                    <div><span class="green-text">Line #12</span>: remove's value can be true or false. By setting to true, it will docker rm _container_name_ on each run. By default, this is set to false.</div>
+                    <div><span class="green-text">Line #13</span>: the image name to be pulled, built and run against</div>
+                    <div><span class="green-text">Line #14</span>: pull can be set to true or false. It's false by default. This will allow you to pull an image before each run.</div>
+                    <div><span class="green-text">Line #15</span>: if a value is set to build, that will be the directory of the dockerfile to build against each time</div>
+                    <div><span class="green-text">Line #16</span>: notice how it's in blue? It means that yoda will interpret this as a docker run option. In this case, --name ${PWD##*/} will make the container name the directory name!</div>
+                    <div><span class="green-text">Line #17</span>: the -P option in docker is to publish. Yoda does not care what keys you put here. If it's a single charachter, it will default to -P. The upside to this method is that yoda can keep up with the docker CLI should it ever change. Just simply update the .yoda configuration file!</div>
+                    <div><span class="green-text">Line #18-27</span>: Because these are not yoda specific keys, yoda will use these to construct the docker run command.</div>
+                    <div><span class="green-text">Line #28</span>: setup takes in a string , or a list of shell commands. The first time yoda lift is run on this project, it will try to run the setup command after initialising the directory. In this case, it's cloning a repository.</div>
+                    <div><span class="green-text">Line #33</span>: success key takes in a string or a list of shell commands to be run on the very first yoda interaction with this project.</div>
+                    <div><span class="green-text">Line #34</span>: notes takes in a string or a list of print statements, which is useful when the command is finished to let the end user know what took place.</div>
+                    <div><span class="green-text">Line #36</span>: control is a special feature of yoda. It allows you to control specific yoda containers. This example is demonstrating that first you want to tail a log file, and then you want to hop inside the container!(see yoda control command below)</div>
+                    <div><span class="green-text">Line #39</span>: env key takes in a list of keys that you can come up with. In this example, the two are test and prod. Which means, when yoda is invoked with prod/test, these will overwrite the default settings found in the yoda configuration file! (see yoda control command below)</div>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="parfait">
+            <div class="commands droid-text">
+                <div class="title speaking-text">Commands, to learn.</div>
+                <div class="intro">
+                    Below are the available commands that can be used within yoda. <i>Note that items in [] are optional.</i> <br/>--force is used to perform actions as if they were never done previously. <br/>--loudly adds extra verbosity to the command executed.
+                </div>
+                <div class="command">
+                    <span class="blue-text">yoda lift [env] [--loudly, --force]</span>
+                    <div>
+                        Within the folder(or subfolder) that contains your .yoda configuration file, will run the .yoda file. Will perform builds, pulls, removes starts runs for you. Automagically.
+                    <div>
+                <div>
+                <div class="command">
+                    <span class="blue-text">yoda seek [env] [--loudly, --force]</span>
+                    <div>
+                        Seek will go through, recursively, the folders from the directory you ran the seek in and perform a yoda lift [env] [--loudly, --force] on each of the .yoda files it finds. This is especially useful if you killed all the containers, or if your machine rebooted or you just need to bring up all of your enviornments at once. Of course, feel free to go into each folder and manually run a yoda lift [env] [--loudly, --force] individually.
+                    <div>
+                <div>
+                <div class="command">
+                    <span class="blue-text">yoda summon user/project [--loudly, --force]</span>
+                    <div>
+                        Summon will allow you to fetch from a remote repository a specific yoda file, and perform a lift on it. Depending on the setup and configuration of the yoda file, it might go through and check out code for you, and get your enviornment setup for you. Take a look at the repositories below, for a list of availabe configurations that are available to you.
+                    <div>
+                <div>
+                <div class="command">
+                    <span class="blue-text">yoda control [env] [--loudly]</span>
+                    <div>
+                        From within the project folder(or subfolder), yoda control will simply take your command and perform a docker exec -t -i <name_of_container_running> There is a "control" keyword inside the .yoda file. You can specify commands by a yaml list. So for example, let say you needed to "echo hello world" each time before launching to the container, you can do that here. This will run for all containers within the configuration file. If no control keys are found, it will simply run 'bash' within the last docker container found in the .yoda config file.
+                    <div>
+                <div>
+                <div class="command">
+                    <span class="blue-text">yoda kill</span>
+                    <div>
+                        A command to kill all running docker containers. This works exceptionally well with the yoda seek command.
+                    <div>
+                <div>
+
+
+            </div>
+            <div class="clear"></div>
+        </div>
+        <a href="https://github.com/kcmerrill/yoda"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>
     </body>
 </html>
