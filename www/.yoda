@@ -13,10 +13,13 @@ automagicproxy:
     - More info can be found at https://registry.hub.docker.com/u/kcmerrill/automagicproxy/
 yoda:
   image: kcmerrill/base
+  h: ${HOSTNAME}
   P: true
   v:
    - $PWD:/var/www/html
   remove: true
+  control:
+   - tail -f /var/log/apache2/error.log
   env:
    access:
     control:

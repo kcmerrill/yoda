@@ -16,9 +16,8 @@ class yoda {
         $this->modifier = $modifier;
         $this->args = is_array($args) ? $args : array();
         $this->speak();
-        if(filemtime($this->app['config']->c('yoda.root_dir') . '/yoda.last_updated') + 604800 <= time()) {
-            $this->update();
-        }
+        /* Do we need to run the updater? */
+        $this->app['updater']->check() ? $this->update : NULL;
         try {
             $this->$action($modifier);
          } catch (\Exception $e) {
@@ -60,6 +59,17 @@ class yoda {
         }
     }
 
+    function find($to_find = false) {
+        $repos = $this->app['repos']->get();
+        $shares = $this->app['shares']->get($repos, $to_find);
+        foreach($shares as $share_name=>$share_data) {
+            $description = isset($share_data['description']) ? $share_data['description'] : 'No description available';
+            $hosted = isset($share_data['hosted']) ? $share_data['hosted'] : 'unknown';
+            $this->app['cli']->out('<green>'. str_pad($share_name, 25, ' ') .'</green> - <white>'. $description .'</white>');
+            $this->app['cli']->out('<light_blue>' . str_pad($hosted, 28 + strlen($hosted), ' ', STR_PAD_LEFT) . '</light_blue>');
+            echo PHP_EOL;
+        }
+    }
     function lift($env = false) {
         $original_location = getcwd();
         $this->app['yaml']->smartConfig();
@@ -81,8 +91,7 @@ class yoda {
                 chdir($original_location);
             }
             if(in_array($container_config['name'], $this->lifted)) {
-                unset($config[$container_name]);
-                $this->app['cli']->out('<green>[Yoda]</green><white> ' . $container_config['name'] . ' already running ... </white>');
+                unset($config[$container_name]); $this->app['cli']->out('<green>[Yoda]</green><white> ' . $container_config['name'] . ' already running ... </white>');
             } else {
                 $this->lifted[] = $container_config['name'];
             }
@@ -121,7 +130,7 @@ class yoda {
             if(!is_file($folder)) {
                 @mkdir($folder, 0755, true);
             }
-            $repos = $this->app['config']->get('yoda.repos', array('yoda.kcmerrill.com'));
+            $repos = $this->app['repos']->get();
             chdir(getcwd() . '/' . $folder);
             $this->app['yaml']->saveConfigFile($project_name, $repos);
             $this->lift($project_name);

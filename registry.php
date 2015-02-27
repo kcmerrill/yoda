@@ -1,5 +1,4 @@
 <?php
-
 require __DIR__ . '/vendor/autoload.php';
 
 //TODO: Before committing, uncomment this line
@@ -12,6 +11,18 @@ if (!ini_get('date.timezone')){
 use Pimple\Container;
 
 $app = new Container();
+
+$app['updater'] = function ($c) use ($app) {
+    return new kcmerrill\yoda\updater($app['config']);
+};
+
+$app['shares'] = function ($c) use ($app) {
+    return new kcmerrill\yoda\shares($app['config']);
+};
+
+$app['repos'] = function ($c) use ($app) {
+    return new kcmerrill\yoda\repos($app['config']);
+};
 
 $app['docker'] = function ($c) {
     return new kcmerrill\yoda\docker;
@@ -46,3 +57,4 @@ $app['shell'] = $app->factory(function($c) {
 $app['yoda'] = function($c) use($argv) {
     return new kcmerrill\yoda($c, isset($argv[1]) ? $argv[1] : 'version', isset($argv[2]) ? $argv[2] : false, $argv);
 };
+

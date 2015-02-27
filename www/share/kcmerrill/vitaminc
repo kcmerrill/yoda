@@ -1,0 +1,7 @@
+vitaminc:
+  require:
+    - kcmerrill/automagicproxy
+  image: kcmerrill/vitaminc
+  v:
+    - $(dirname $PWD):$(dirname $PWD)
+  p: 9999:9999
