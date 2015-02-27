@@ -24,7 +24,7 @@ class shell {
 
         //Useful for prompts, etc
         if($ignore_yoda_response) {
-            return $output;
+            return $results;
         }
 
         //Don't show the user the command, just in case
@@ -37,7 +37,7 @@ class shell {
         }else {
             $this->cli->out('<green>[Do]</green> <white>' . $command . '</white>');
         }
-        return $output;
+        return $results;
     }
 
     function executeInstructions($instructions, $interactive) {
@@ -57,7 +57,7 @@ class shell {
             if(isset($configuration['success'])) {
                 $configuration['success'] = is_string($configuration['success']) ? array($configuration['success']) : $configuration['success'];
                 foreach($configuration['success'] as $command) {
-                    $success = $this->execute($command, $interactive, true);
+                    $this->execute($command, $interactive, true);
                 }
             }
             if(isset($configuration['notes'])){

@@ -23,7 +23,7 @@ $app['events'] = function ($c) {
 
 $app['config'] = function($c) {
     $config = new kcmerrill\utility\config(__DIR__, true);
-    $config['yoda.root'] = __DIR__;
+    $config['yoda.root_dir'] = __DIR__;
     return $config;
 };
 
