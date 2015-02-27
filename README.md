@@ -11,33 +11,6 @@ Yoda is a command line tool used to interact with docker projects/containers bas
 - Functionality for different environments built in(no need for additional config files based on env)
 - A few more!!!
 
-## Commands ##
-```yoda lift [--loudly, --force]```
-
-Within the folder that contains your .yoda configuration file, will run the .yoda file. Will perform builds, pulls, removes starts runs for you. Automagically.
-
-```yoda lift <env> [--loudly, --force]```
-
-Exactly the same as ```yoda lift [--loudly, --force]``` except, <env> is not part of a special configuration. See the configuration section for more details.
-
-```yoda seek <env> [--loudly, --force]```
-
-Seek will go through, recursively, the folders from the directory you ran the seek in and perform a ```yoda lift [--loudly, --force]``` on each of the .yoda files it finds. This is especially useful if you killed all the containers, or if your machine rebooted or you just need to bring up all of your enviornments at once. Of course, feel free to go into each folder and manually run a ```yoda lift [--loudly, --force]``` individually.
-
-```yoda summon <name_of_yoda_file> [--loudly, --force]```
-
-This will prompt you to create a folder in the current working directory. It's done this way, so you can use this with yoda seek! http://yoda.kcmerrill.com/share/ will show all of the available .yoda files to summon. Summon is a feature that allows someone to pull down a .yoda file that someone has worked on. Perhaps it's getting a new dev enviornment setup, or perhaps it's an optimized docker image for mysql or _insert some image here_. The sky is the limit. _use --force to force overwrite the folder if that specific folder already exists_
-
-```yoda control [--loudly]```
-
-From within the folder, yoda control will simply take your command and perform a ```docker exec -t -i <name_of_container_running>``` There is a "control" keyword inside the .yoda file. You can specify commands by a yaml list. So for example, let say you needed to "echo hello world" each time before launching to the container, you can do that here. This will run for all containers within the configuration file. If no control keys are found, it will simply run 'bash' within the last docker container found in the .yoda config file.
-
-```yoda control <name_of_config_for_container> [--loudly]```
-Same as ```yoda control [--loudly]``` except going through only the container configuration specified. 
-
-```yoda kill [--loudly]```
-Will __kill all__ of the containers currently running
-
 ## Installation ##
 1. [Install Composer](http://getcomposer.org)
 2. `cd yoda_folder/ && composer.phar install`
