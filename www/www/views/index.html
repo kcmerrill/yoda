@@ -3,11 +3,11 @@
         <title>
             Yoda - Docker made easier
         </title>
-    <link href='http://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css'>
     <link href='css/yoda.css' rel='stylesheet' type='text/css'>
     <link href='css/bubble.css' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link href='http://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Oxygen+Mono' rel='stylesheet' type='text/css'>
     </head>
     <body>
         <div class="header">
@@ -24,24 +24,14 @@
                     <div>Instead of writing bash scripts over and over ...</div>
                     <div class="features">
                         <div><i class="pull-left green-text fa fa-check"></i> Docker cli wrapper means full usage of shell commands.</div>
-                        <div><i class="pull-left green-text fa fa-check"></i> All ocker run commands fully available(they simply pass through if it's not a yoda keyword)</div>
-                        <div><i class="pull-left green-text fa fa-check"></i> Shareable configurations! Need a lamp setup? Need a db? We have you covered with yoda summon!</div>
+                        <div><i class="pull-left green-text fa fa-check"></i> All docker run commands fully available</div>
+                        <div><i class="pull-left green-text fa fa-check"></i> Shareable configurations! Need a lamp setup? Need a db? Simply summon them!</div>
                         <div class="speaking-text blue-text">And many more ...</div>
                     </div>
                 </div>
             </div>
             <img class="yoda" src="images/yoda-outline.png">
             <img class="docker" src="images/docker.png">
-            <div class="clear"></div>
-        </div>
-        <div class="parfait green-bg">
-            <div class="compliments speaking-text">
-                <div class="title">Compliments on yoda these are.</div>
-                <div class="bubble droid-text">"Random bash scripts and 1k+ aliases are the path to the dark side. Fear leads to anger. Anger leads to hate. Hate leads to suffering."<br/><span class="from speaking-text">- Some Developer<span></div>
-                <div class="bubble droid-text">"Always pass on what you have learned."<br/><span class="from speaking-text">- Some Other Developer<span></div>
-                <div class="bubble droid-text">"Powerful you have become, the dark side I sense in you."<br/><span class="from speaking-text">- Yet Another Developer<span></div>
-                <div class="bubble droid-text">"Patience you must have, my young padwan."<br/><span class="from speaking-text">- A Wise Developer<span></div>
-            </div>
             <div class="clear"></div>
         </div>
         <div class="parfait blue-bg">
@@ -75,11 +65,25 @@
             </div>
             <div class="clear"></div>
         </div>
+        <div class="parfait green-bg">
+            <div class="compliments speaking-text">
+                <div class="title">Compliments on yoda these are.</div>
+                <div class="bubble droid-text">"Random bash scripts and 1k+ aliases are the path to the dark side. Fear leads to anger. Anger leads to hate. Hate leads to suffering."<br/><span class="from speaking-text">- Some Developer<span></div>
+                <div class="bubble droid-text">"Always pass on what you have learned."<br/><span class="from speaking-text">- Some Other Developer<span></div>
+                <div class="bubble droid-text">"Powerful you have become, the dark side I sense in you."<br/><span class="from speaking-text">- Yet Another Developer<span></div>
+                <div class="bubble droid-text">"Patience you must have, my young padwan."<br/><span class="from speaking-text">- A Wise Developer<span></div>
+            </div>
+            <div class="clear"></div>
+        </div>
+
         <div class="parfait">
             <div class="commands droid-text">
                 <div class="title speaking-text">Commands, to learn.</div>
                 <div class="intro">
-                    Below are the available commands that can be used within yoda. <i>Note that items in [] are optional.</i> <br/>--force is used to perform actions as if they were never done previously. <br/>--loudly adds extra verbosity to the command executed.
+                    Below are the available commands that can be used within yoda. <i>Note that items in [] are optional.</i> <br/>--force is used to perform actions as if they were never done previously. <br/>--loudly adds extra verbosity to the command executed.<br/>[env] by specifying the env variable, this will allow you to use different configuration based on different use cases.
+                    <br/>
+                    <br/>
+                    <br/>
                 </div>
                 <div class="command">
                     <span class="blue-text">yoda lift [env] [--loudly, --force]</span>
@@ -102,13 +106,13 @@
                 <div class="command">
                     <span class="blue-text">yoda control [env] [--loudly]</span>
                     <div>
-                        From within the project folder(or subfolder), yoda control will simply take your command and perform a docker exec -t -i <name_of_container_running> There is a "control" keyword inside the .yoda file. You can specify commands by a yaml list. So for example, let say you needed to "echo hello world" each time before launching to the container, you can do that here. This will run for all containers within the configuration file. If no control keys are found, it will simply run 'bash' within the last docker container found in the .yoda config file.
+                        From within the project folder(or subfolder), yoda control will simply take your command and perform a docker exec -t -i _name_of_container_running_. There is a "control" keyword inside the .yoda file. You can specify commands by a yaml list. So for example, let say you needed to tail an apache log. Instead of hopping into the container, and tailing it each time. Simply set up the control.
                     <div>
                 <div>
                 <div class="command">
                     <span class="blue-text">yoda kill</span>
                     <div>
-                        A command to kill all running docker containers. This works exceptionally well with the yoda seek command.
+                        Sometimes you just need to nuke your workspace. This will kill all of the running docker containers.
                     <div>
                 <div>
                 <div class="command">
@@ -117,6 +121,40 @@
                         In a directory of a new .yoda file you've created, simply run the share command with your username and package name(no spaces). Once shared, this will allow other users to summon this particular yoda file from you!
                     <div>
                 <div>
+                <div class="command">
+                    <span class="blue-text">yoda find [package_name]</span>
+                    <div>
+                        Displays a list of packages that you can summon. Once you find a package you like, then yoda summon user/package_name. This does not require a username/package_name. You an simply use a package name, but be careful in that if a user has multiple repositories, yours may be overwritten based on preference.
+                    <div>
+                <div>
+                <div class="command">
+                    <span class="blue-text">yoda search [package_name]</span>
+                    <div>
+                        <i>An alias to the find command.</i>
+                    <div>
+                <div>
+
+            </div>
+            <div class="parfait blue-bg">
+                <div class="screenshots speaking-text">
+                    <div class="title green-font">Screenshots and Screencasts for you to learn much from.</div>
+                    <div class="help">
+                        <div class="command green-text speaking-text">Yoda seek</div>
+                            <img src="images/yoda_seek.png">
+                            <div class="droid-text">Yoda seek is useful in that, if you have an system setup that you need to restart a bunch of projects. Yoda seek will find .yoda files recursevily and attempt to lift them. Yoda seek, and then grab a cup of coffee. When you get back, your containers should all have been lifted.</div>
+                        </div>
+                    </div>
+                    <div class="help">
+                        <div class="command green-text speaking-text">Yoda control</div>
+                            <img src="images/yoda_control.png">
+                            <div class="droid-text">
+                                <p>Yoda control allows you to interact with your containers in an easier way.</p>
+                                <p>Notice the control key in the .yoda file(seen at the bottom). In this example, both containers have have specific things to do when control is invoked. By simply calling yoda control, yoda will invoke all commands within the control list. By adding the container name(specifically the configuration name) you can invoke only individual container control commands. By default, yoda will only use the last container listed and perform a bash command, therefore allowing you to play around inside the container.
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
             <div class="clear"></div>
         </div>

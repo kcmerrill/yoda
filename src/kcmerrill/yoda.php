@@ -58,13 +58,13 @@ class yoda {
             throw new \Exception('Only share things that are name followed by project, I can!  Yeesssssss. ' . PHP_EOL . 'Eg: yoda share db/mysql');
         }
     }
-    
+
     function search($to_find = false) {
         $this->find($to_find);
     }
-    
+
     function find($to_find = false) {
-        $repos = $this->app['repos']->get();
+        $repos = $this->app['repos']->get(true);
         $shares = $this->app['shares']->get($repos, $to_find);
         foreach($shares as $share_name=>$share_data) {
             $description = isset($share_data['description']) ? $share_data['description'] : 'No description available';

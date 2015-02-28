@@ -9,12 +9,13 @@ body {
     padding:0px;
     margin:0px;
     background-color:#D8D8D8;
+    font-family: 'Anonymous Pro', ;
 }
 .speaking-text {
-    font-family: 'Kaushan Script', cursive;
+    font-family: 'Architects Daughter', cursive;
 }
 .droid-text {
-    font-family: 'Droid Sans', sans-serif;
+    font-family: 'Oxygen Mono' !important;
 }
 .bolded-text {
     font-weight:bold;
@@ -73,7 +74,7 @@ body {
 }
 .hero .thoughts {
     float:left;
-    font-size:50px;
+    font-size:40px;
     padding-right:20px;
 }
 .hero .thoughts a {
@@ -94,6 +95,7 @@ body {
     padding-top:20px;
 }
 .hero .thoughts .features i{
+    margin-left:20px;
     font-size:30px;
 }
 .hero .yoda {
@@ -144,4 +146,21 @@ body {
 .commands .command div{
     padding-top:20px;
 }
-
+.screenshots .title{
+    font-size:50px;
+    padding-bottom:10px;
+    color:white;
+}
+.screenshots .title {
+    color:white;
+}
+.help {
+    color:white;
+    font-size:15px;
+}
+.help .command {
+    font-size:50px;
+}
+.help img {
+    width:100%;
+}
