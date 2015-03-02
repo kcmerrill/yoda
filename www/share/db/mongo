@@ -1,3 +1,8 @@
 mongodb:
     image: mongo
+    description: A mongo datbase.
+    notes: Port 27017 was exposed. Use 'yoda lift publish' to bind to host port 27017
+    env:
+      publish:
+        P: true
 

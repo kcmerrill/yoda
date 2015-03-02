@@ -1,4 +1,4 @@
-lamp:
+sandbox:
  pull: true
  require:
   - kcmerrill/automagicproxy
@@ -10,3 +10,4 @@ lamp:
  v:
   - $PWD:/var/www/html
  notes: Your sandbox is running on port sandbox.$HOSTNAME
+ description: A PHP Webserver.

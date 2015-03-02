@@ -5,3 +5,4 @@ vitaminc:
   v:
     - $(dirname $PWD):$(dirname $PWD)
   p: 9999:9999
+  description: A multi language(PHP, Javascript, ) test runner.

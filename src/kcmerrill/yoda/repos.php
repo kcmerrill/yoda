@@ -9,8 +9,9 @@ class repos {
 
     function get($reverse = false) {
         $repos = $this->config->get('yoda.repos', array());
-        $repos[] = 'yoda.kcmerrill.com';
+        array_unshift($repos, 'yoda.kcmerrill.com');
         array_unshift($repos, 'yoda.' . gethostname());
-        return $reverse ?  array_reverse($repos) : array_unique($repos);
+        $repos = array_unique($repos);
+        return $reverse ?  array_reverse($repos) : $repos;
     }
 }

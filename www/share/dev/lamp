@@ -16,7 +16,7 @@ kcmerrill/base:
  image: kcmerrill/base
  remove: true
  name: ${PWD##*/}
- setup: 
+ setup:
    - mkdir www
    - echo "yoda works!" > www/index.php
    - docker exec -t -i automagicproxy /automagicproxy/bin/reload
@@ -26,3 +26,4 @@ kcmerrill/base:
  notes:
   - Simply rename this root folder to be your new subdomain
   - Your webserver is running  ${PWD##*/}.$HOSTNAME
+ description: A PHP Webserver and a MySQL database.

@@ -20,7 +20,7 @@ class yamlConfig {
         'require'=>array()
     );
     var $custom = array(
-        'build','pull','remove','image','env','run','notes','prompt','prompt_password', 'success','setup','control','require'
+        'build','pull','remove','image','env','run','notes','prompt','prompt_password', 'success','setup','control','require','description'
     );
 
     var $force_remove = false;

@@ -58,6 +58,12 @@ function fetch_shares($to_search_for = false){
             'yaml'=>$yaml,
             'hosted'=>$_SERVER['SERVER_NAME']
         );
+        /* Try to fetch the description */
+        foreach($yaml as $container_name=>$config) {
+            if(isset($config['description'])) {
+                $shares[$yoda]['description'] = $config['description'];
+            }
+        }
     }
     return json_encode($shares, JSON_PRETTY_PRINT);
 

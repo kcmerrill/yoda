@@ -14,3 +14,4 @@ automagicproxy:
  notes:
     - AutomagicProxy is now running $HOSTNAME:80.
     - More info can be found at https://registry.hub.docker.com/u/kcmerrill/automagicproxy/
+ description: A reverse proxy that uses *.dns entries that maps to container names. Automagically.
