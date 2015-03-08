@@ -18,7 +18,7 @@ class yoda {
         $this->args = is_array($args) ? $args : array();
         $this->speak();
         /* Do we need to run the updater? */
-        $this->app['updater']->check() ? $this->update : NULL;
+        $this->app['updater']->check() ? $this->self_update() : NULL;
         /* Giddy Up! */
         try {
             $this->{$this->action}($modifier);
