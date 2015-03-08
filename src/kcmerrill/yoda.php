@@ -10,27 +10,66 @@ class yoda {
     var $spoke = false;
     var $lifted = array();
     var $summoning = false;
+
     function __construct($app, $action = false, $modifier = false, $args = array()) {
         $this->app = $app;
-        $this->action = $action;
+        $this->action = str_replace('-','_',$action);
         $this->modifier = $modifier;
         $this->args = is_array($args) ? $args : array();
         $this->speak();
         /* Do we need to run the updater? */
         $this->app['updater']->check() ? $this->update : NULL;
+        /* Giddy Up! */
         try {
-            $this->$action($modifier);
+            $this->{$this->action}($modifier);
          } catch (\Exception $e) {
             $this->app['cli']->out('<green>[Yoda]</green> <red>' . $e->getMessage() . '</red>');
          }
 
     }
-    function update($env = false) {
+
+    function repos() {
+        $repos = $this->app['repos']->get();
+        foreach($repos as $repo) {
+            $this->app['cli']->out('<green>[Yoda]</green> <white>' . $repo . '</white>');
+        }
+    }
+
+    function join($repo = false) {
+        return $this->add_repo($repo);
+    }
+
+    function add_repo($repo = false) {
+        if($repo) {
+            if($this->app['repos']->add($repo, $this->app['yaml'], $this->app['config'])) {
+                $this->app['cli']->out('<green>[Yoda]</green> <white>Added repository "'. $repo .'".</white>');
+            }
+        } else {
+            throw new \Exception('Have, a valid URL I must.' . PHP_EOL . '<white>Eg: yoda add-repo http://yoda.yourawesomesitehere.com</white>');
+        }
+    }
+
+    function leave($repo = false) {
+        return $this->remove_repo($repo);
+    }
+
+    function remove_repo($repo = false) {
+        if($repo) {
+            if($this->app['repos']->remove($repo, $this->app['yaml'], $this->app['config'])) {
+                $this->app['cli']->out('<green>[Yoda]</green> <white>Removed repository "'. $repo .'".</white>');
+            }
+        } else {
+            throw new \Exception('Have, a valid URL I must.' . PHP_EOL . '<white>Eg: yoda remove-repo http://yoda.yourawesomesitehere.com</white>');
+        }
+    }
+
+    function self_update($env = false) {
         $cwd = getcwd();
         $root_dir = $this->app['config']->c('yoda.root_dir');
         chdir($root_dir);
         $this->app['cli']->out('<background_green><black>To update I need. herh.</black></background_green>');
         $this->app['shell']->execute('git pull', in_array('--loudly', $this->args));
+        $this->app['shell']->execute('composer update', in_array('--loudly', $this->args));
         chdir($cwd);
         touch($root_dir . '/yoda.last_updated');
     }
@@ -59,6 +98,16 @@ class yoda {
         }
     }
 
+    function update($env = false) {
+        $config = $this->app['yaml']->configFileContents($env);
+        foreach($config as $container_name=>$container_config) {
+            $update = is_array($container_config['update']) ? $container_config['update'] : array($container_config['update']);
+            foreach($update as $command) {
+                $this->app['shell']->execute($command, in_array('--loudly', $this->args));
+            }
+        }
+    }
+
     function search($to_find = false) {
         $this->find($to_find);
     }
@@ -74,6 +123,7 @@ class yoda {
             echo PHP_EOL;
         }
     }
+
     function lift($env = false) {
         $original_location = getcwd();
         $this->app['yaml']->smartConfig();
@@ -113,12 +163,14 @@ class yoda {
             $this->lift($this->modifier);
         }
     }
+
     function control() {
         $this->app['yaml']->smartConfig();
         $config = $this->app['yaml']->configFileContents($this->modifier);
         $instructions = $this->app['instruct']->control($config, $this->modifier);
         $this->app['shell']->executeInstructions($instructions, true);
     }
+
     function summon($project_name) {
         $folder = $project_name;
         if(strpos($folder, '/') === FALSE) {
@@ -141,13 +193,17 @@ class yoda {
         }
         return $folder;
     }
+
     function version($modifier = false) {
         $this->app['cli']->out('v' . $this->version);
+        echo PHP_EOL;
+        $this->app['cli']->out('For help, please see <green>http://yoda.kcmerrill.com</green>');
     }
 
     function kill($modifier = false) {
         $this->app['shell']->execute($this->app['docker']->killall(), in_array('--loudly', $this->args));
     }
+
     function speak() {
         if($this->spoke) {
             return true;
@@ -161,6 +217,7 @@ $this->app['cli']->out("
 
         $this->spoke = true;
     }
+
     function __call($method, $params) {
         throw new \Exception($method . '? I know not what you mean.');
     }

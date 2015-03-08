@@ -2,6 +2,7 @@
 
 namespace kcmerrill\yoda;
 use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Yaml\Dumper;
 
 class yamlConfig {
     var $config_file = '.yoda';
@@ -10,17 +11,28 @@ class yamlConfig {
         'pull'=>false, // _do not_ pull by default
         'remove'=>false, // _do not_ remove by default
         'd'=>true, // detached mode
+        't'=>false,
+        'i'=>false,
         //No steps required by default
         'prompt'=>array(),
         'prompt_password'=>array(),
         'setup'=>array(),
-        'setup_prompt'=>array(),
         'success'=>array(),
         'control'=>false,
-        'require'=>array()
+        'update'=>array(),
+        'require'=>array(),
+        /* Setup a debug env, useful for interactive mode */
+        'env'=>array(
+            'debug'=>array(
+                'd'=>false,
+                't'=>true,
+                'i'=>true,
+                'entrypoint'=>'bash'
+            )
+        )
     );
     var $custom = array(
-        'build','pull','remove','image','env','run','notes','prompt','prompt_password', 'success','setup','control','require','description'
+        'build','pull','remove','image','env','run','notes','prompt','prompt_password', 'success','setup','control','require','description','update'
     );
 
     var $force_remove = false;
@@ -34,6 +46,11 @@ class yamlConfig {
         while(dirname(getcwd()) != '/' && !is_file('.yoda')) {
            chdir(dirname(getcwd()));
         }
+    }
+
+    function save($file, $contents) {
+        $yaml = Dumper::Dump($contents);
+        return file_put_contents($file, $yaml) ? true : false;
     }
 
     function configFileContents($env = false) {

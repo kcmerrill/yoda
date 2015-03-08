@@ -9,7 +9,6 @@ class instruct {
         $this->instructions = array(
             'prompt'=>array(),
             'setup'=>array(),
-            'setup_prompt'=>array(),
             'pull'=>array(),
             'build'=>array(),
             'kill'=>array(),
@@ -17,7 +16,8 @@ class instruct {
             'start'=>array(),
             'success'=>array(),
             'run'=>array(),
-            'require'=>array()
+            'require'=>array(),
+            'update'=>array()
         );
     }
 
@@ -64,11 +64,6 @@ class instruct {
                 }
                 foreach($config['setup'] as $command) {
                     $this->instructions['setup'][] = $command;
-                }
-            }
-            if(!$setup && $config['setup_prompt']) {
-                foreach($config['setup_prompt'] as $command) {
-                    $this->instructions['setup_prompt'][] = $command;
                 }
             }
             if($config['pull']) {
