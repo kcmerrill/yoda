@@ -67,7 +67,7 @@ class yoda {
         $cwd = getcwd();
         $root_dir = $this->app['config']->c('yoda.root_dir');
         chdir($root_dir);
-        $this->app['cli']->out('<background_green><black>To update I need. herh.</black></background_green>');
+        $this->app['cli']->out('<green>[Yoda]</green> <white>To update I need. herh.</white>');
         $this->app['shell']->execute('git pull', in_array('--loudly', $this->args));
         $this->app['shell']->execute('./composer update', in_array('--loudly', $this->args));
         chdir($cwd);
@@ -106,6 +106,8 @@ class yoda {
                 $this->app['shell']->execute($command, in_array('--loudly', $this->args));
             }
         }
+        /* Perform a lift to get the updated changes */
+        $this->lift($env);
     }
 
     function search($to_find = false) {
