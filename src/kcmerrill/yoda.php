@@ -69,7 +69,7 @@ class yoda {
         chdir($root_dir);
         $this->app['cli']->out('<background_green><black>To update I need. herh.</black></background_green>');
         $this->app['shell']->execute('git pull', in_array('--loudly', $this->args));
-        $this->app['shell']->execute('composer update', in_array('--loudly', $this->args));
+        $this->app['shell']->execute('./composer update', in_array('--loudly', $this->args));
         chdir($cwd);
         touch($root_dir . '/yoda.last_updated');
     }
@@ -121,6 +121,22 @@ class yoda {
             $this->app['cli']->out('<green>'. str_pad($share_name, 25, ' ') .'</green> - <white>'. $description .'</white>');
             $this->app['cli']->out('<light_blue>' . str_pad($hosted, 28 + strlen($hosted), ' ', STR_PAD_LEFT) . '</light_blue>');
             echo PHP_EOL;
+        }
+    }
+
+    function export($env = false) {
+        $config = $this->app['yaml']->configFileContents($env);
+        $instructions = $this->app['instruct']->lift($config);
+        if(!in_array('--force', $this->args) && file_exists('yoda.sh')) {
+            throw new \Exception('yoda.sh exists! Use the force(--force) and try again, you should.  Yes, hmmm.');
+        } else {
+            foreach($instructions as $i=>$commands) {
+                if(count($commands))
+                $to_write .= implode("\n", $commands) . PHP_EOL;
+            }
+            file_put_contents('yoda.sh', $to_write);
+            chmod('yoda.sh', 0755);
+            $this->app['cli']->out('<green>Shared your wisdom with a shell script, I have.  Hmmmmmm.</green>');
         }
     }
 
