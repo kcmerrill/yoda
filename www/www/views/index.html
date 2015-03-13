@@ -80,37 +80,37 @@
             <div class="commands droid-text">
                 <div class="title speaking-text">Commands, to learn.</div>
                 <div class="intro">
-                    Below are the available commands that can be used within yoda. <i>Note that items in [] are optional.</i> <br/>--force is used to perform actions as if they were never done previously. <br/>--loudly adds extra verbosity to the command executed.<br/>[env] by specifying the env variable, this will allow you to use different configuration based on different use cases.
+                    Below are the available commands that can be used within yoda. <i>Note that items in [] are optional.</i> <br>--export is used to take the script yoda generated and write it to a yoda.sh file for you.<br/>--force is used to perform actions as if they were never done previously. <br/>--loudly adds extra verbosity to the command executed.<br/>[env] by specifying the env variable, this will allow you to use different configuration based on different use cases.
                     <br/>
                     <br/>
                     <br/>
                 </div>
                 <div class="command">
-                    <span class="blue-text">yoda lift [env] [--loudly, --force]</span>
+                    <span class="blue-text">yoda lift [env] [--loudly, --force, --export]</span>
                     <div>
                         Within the folder(or subfolder) that contains your .yoda configuration file, will run the .yoda file. Will perform builds, pulls, removes starts runs for you. Automagically.
                     <div>
                 <div>
                 <div class="command">
-                    <span class="blue-text">yoda seek [env] [--loudly, --force]</span>
+                    <span class="blue-text">yoda seek [env] [--loudly, --force, --export]</span>
                     <div>
                         Seek will go through, recursively, the folders from the directory you ran the seek in and perform a yoda lift [env] [--loudly, --force] on each of the .yoda files it finds. This is especially useful if you killed all the containers, or if your machine rebooted or you just need to bring up all of your enviornments at once. Of course, feel free to go into each folder and manually run a yoda lift [env] [--loudly, --force] individually.
                     <div>
                 <div>
                 <div class="command">
-                    <span class="blue-text">yoda summon user/project [--loudly, --force]</span>
+                    <span class="blue-text">yoda summon user/project [--loudly, --force, --export]</span>
                     <div>
                         Summon will allow you to fetch from a remote repository a specific yoda file, and perform a lift on it. Depending on the setup and configuration of the yoda file, it might go through and check out code for you, and get your enviornment setup for you. Take a look at the repositories below, for a list of availabe configurations that are available to you.
                     <div>
                 <div>
                 <div class="command">
-                    <span class="blue-text">yoda control [env] [--loudly]</span>
+                    <span class="blue-text">yoda control [env] [--loudly, --export]</span>
                     <div>
                         From within the project folder(or subfolder), yoda control will simply take your command and perform a docker exec -t -i _name_of_container_running_. There is a "control" keyword inside the .yoda file. You can specify commands by a yaml list. So for example, let say you needed to tail an apache log. Instead of hopping into the container, and tailing it each time. Simply set up the control.
                     <div>
                 <div>
                 <div class="command">
-                    <span class="blue-text">yoda kill</span>
+                    <span class="blue-text">yoda kill [--export]</span>
                     <div>
                         Sometimes you just need to nuke your workspace. This will kill all of the running docker containers.
                     <div>
@@ -134,7 +134,7 @@
                     <div>
                 <div>
                 <div class="command">
-                    <span class="blue-text">yoda update [env]</span>
+                    <span class="blue-text">yoda update [env] [--export]</span>
                     <div>
                         <b>**NEW**</b> This will run the update commands within the yoda file. Useful for adding git submodule updates as an example.
                     <div>
@@ -160,7 +160,7 @@
                 <div class="command">
                     <span class="blue-text">yoda export [env]</span>
                     <div>
-                        <b>**NEW**</b> Not a fan of yoda? Don't have php installed on a specific box? Just need the .sh commands yoda is running? Export will put all of the commands into a yoda.sh file for you to modify.
+                        <b>**NEW**</b> Not a fan of yoda? Don't have php installed on a specific box? Just need the .sh commands yoda is running? Export will put all of the commands into a yoda.sh file for you to modify and distribute seperatly.
                     <div>
                 <div>
             </div>

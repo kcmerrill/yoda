@@ -36,15 +36,17 @@ class yamlConfig {
     );
 
     var $force_remove = false;
+    var $app;
 
-    function __construct($force_remove = false) {
+    function __construct($app, $force_remove = false) {
+        $this->app = $app;
         $this->force_remove = $force_remove;
     }
 
     function smartConfig(){
         //Make sure yoda can start anywhere beneath the master folder
         while(dirname(getcwd()) != '/' && !is_file('.yoda')) {
-           chdir(dirname(getcwd()));
+           $this->app['shell']->cd(dirname(getcwd()));
         }
     }
 

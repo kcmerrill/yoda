@@ -22,6 +22,9 @@ class yoda {
         /* Giddy Up! */
         try {
             $this->{$this->action}($modifier);
+            if(in_array('--export', $this->args)) {
+                $this->export($modifier);
+            }
          } catch (\Exception $e) {
             $this->app['cli']->out('<green>[Yoda]</green> <red>' . $e->getMessage() . '</red>');
          }
@@ -66,11 +69,11 @@ class yoda {
     function self_update($env = false) {
         $cwd = getcwd();
         $root_dir = $this->app['config']->c('yoda.root_dir');
-        chdir($root_dir);
+        $this->app['shell']->cd($root_dir);
         $this->app['cli']->out('<green>[Yoda]</green> <white>To update I need. herh.</white>');
         $this->app['shell']->execute('git pull', in_array('--loudly', $this->args));
         $this->app['shell']->execute('./composer update', in_array('--loudly', $this->args));
-        chdir($cwd);
+        $this->app['shell']->cd($cwd);
         touch($root_dir . '/yoda.last_updated');
     }
 
@@ -126,23 +129,24 @@ class yoda {
     }
 
     function export($env = false) {
-        $config = $this->app['yaml']->configFileContents($env);
-        $instructions = $this->app['instruct']->lift($config);
-        if(!in_array('--force', $this->args) && file_exists('yoda.sh')) {
-            throw new \Exception('yoda.sh exists! Use the force(--force) and try again, you should.  Yes, hmmm.');
-        } else {
-            foreach($instructions as $i=>$commands) {
-                if(count($commands))
-                $to_write .= implode("\n", $commands) . PHP_EOL;
-            }
-            file_put_contents('yoda.sh', $to_write);
-            chmod('yoda.sh', 0755);
+        /* ToDo: Would be nice to export env name(but due to args, this will have to come later) */
+        $file_to_write = $this->app['config']->c('yoda.initial_working_dir') . DIRECTORY_SEPARATOR . 'yoda.sh';
+        /* Don't actually run the commands */
+        $this->app['shell']->dryRun(true);
+        /* if someone calls this without a param only */
+        if(count($this->app['shell']->commands()) == 0){
+            $this->lift($env);
+        }
+        if(file_put_contents($file_to_write, implode("\n", $this->app['shell']->commands()))){
+            chmod($file_to_write, 0755);
             $this->app['cli']->out('<green>[Yoda]</green> <white>Shared my wisdom with a shell script, I have.  Hmmmmmm.</white>');
+        } else {
+            throw new \Exception('Having problems writing my wisdom to the appropriate file I am.  Yes, hmmm.');
         }
     }
 
     function lift($env = false) {
-        $original_location = getcwd();
+        $original_location = $this->app['config']->c('yoda.initial_working_dir');
         $this->app['yaml']->smartConfig();
         $config = $this->app['yaml']->configFileContents($env);
         $setup = is_file('.yoda.setup');
@@ -153,13 +157,13 @@ class yoda {
             $require = is_array($container_config['require']) ? $container_config['require'] : array($container_config['require']);
             $required_project_folder = false;
             foreach($require as $req) {
-                chdir('../');
+                $this->app['shell']->cd('../');
                 try {
                     $this->summon($req);
                 } catch(\Exception $e) {
                     $this->lift($env);
                 }
-                chdir($original_location);
+                $this->app['shell']->cd($original_location);
             }
             if(in_array($container_config['name'], $this->lifted)) {
                 unset($config[$container_name]); $this->app['cli']->out('<green>[Yoda]</green><white> ' . $container_config['name'] . ' already running ... </white>');
@@ -176,7 +180,7 @@ class yoda {
         $configs = $this->app['yaml']->seekConfigFiles(getcwd());
         foreach($configs as $config) {
             $this->app['cli']->out('<green>[Yoda]</green> <white>Found ... ' . $config . '</white>');
-            chdir(dirname($config));
+            $this->app['shell']->cd(dirname($config));
             $this->lift($this->modifier);
         }
     }
@@ -197,14 +201,14 @@ class yoda {
             $this->summoning = $folder;
         }
         if(is_dir($folder) && !in_array('--force', $this->args)) {
-            chdir(getcwd() . '/' . $folder);
+            $this->app['shell']->cd(getcwd() . '/' . $folder);
             $this->lift($project_name);
         } else {
             if(!is_file($folder)) {
                 @mkdir($folder, 0755, true);
             }
             $repos = $this->app['repos']->get();
-            chdir(getcwd() . '/' . $folder);
+            $this->app['shell']->cd(getcwd() . '/' . $folder);
             $this->app['yaml']->saveConfigFile($project_name, $repos);
             $this->lift($project_name);
         }

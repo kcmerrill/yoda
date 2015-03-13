@@ -9,3 +9,7 @@ yoda.last_updated
 */.DS_STORE
 
 yoda.config
+
+yoda.sh
+
+www/yoda.sh

@@ -4,17 +4,46 @@ namespace kcmerrill\yoda;
 class shell {
     var $cli;
     var $lifted = array();
+    var $commands = array();
+    var $dry_run = false;
 
     function __construct($cli) {
         $this->cli = $cli;
     }
 
+    function dryRun($dry_run = false) {
+        $this->dry_run = $dry_run;
+    }
+
+    function commands(){
+        return is_array($this->commands) ? array_filter($this->commands) : array();
+    }
+
+    function addCommand($cmd) {
+        $this->commands[] = $cmd;
+    }
+
+    function cd($dir) {
+        chdir($dir);
+        $this->addCommand('cd ' . getcwd());
+    }
+
     function executeCommandForeground($command) {
+        $this->commands[] = $command;
+        if($this->dry_run) {
+            return true;
+        }
         passthru($command, $results);
     }
 
     function execute($command, $interactive = false, $ignore_yoda_response = false, $do_not_fail = false ) {
         $output = $results = false;
+        $this->commands[] = $command;
+
+        if($this->dry_run) {
+            /* do not execute the command! */
+            return true;
+        }
 
         if($interactive){
             passthru($command, $results);
@@ -61,12 +90,9 @@ class shell {
                 }
             }
             if(isset($configuration['notes'])){
-                if(is_string($configuration['notes'])) {
-                    $this->cli->green(trim(`echo {$configuration['notes']}`));
-                } else {
-                    foreach($configuration['notes'] as $note) {
-                        $this->cli->green(trim(`echo {$note}`));
-                    }
+                $configuration['notes'] = is_array($configuration['notes']) ? $configuration['notes'] : array($configuration['notes']);
+                foreach($configuration['notes'] as $note) {
+                    $this->execute('echo "' . $note . '"', false, true, true);
                 }
             }
         }
