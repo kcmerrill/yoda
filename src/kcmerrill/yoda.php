@@ -146,8 +146,8 @@ class yoda {
     }
 
     function lift($env = false) {
-        $original_location = getcwd();
         $this->app['yaml']->smartConfig();
+        $original_location = getcwd();        
         $config = $this->app['yaml']->configFileContents($env);
         $setup = is_file('.yoda.setup');
         if(in_array('--force', $this->args) && $setup) {
