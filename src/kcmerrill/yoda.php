@@ -85,7 +85,6 @@ class yoda {
                 catch(\Exception $e) {}
                 if(is_file('.yoda')) {
                     file_put_contents($new_share, file_get_contents('.yoda'));
-                    $this->app['cli']->out('<green>[Do]</green> <white>' . $share_as . '</white>');
                     $this->app['cli']->out('<green>[Yoda]</green> <white>Shared your wisdom with the world, I have.  Hmmmmmm.</white>');
                 } else {
                     throw new \Exception('Have, a valid .yoda file I must.');
