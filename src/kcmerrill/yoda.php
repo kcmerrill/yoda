@@ -136,7 +136,7 @@ class yoda {
             }
             file_put_contents('yoda.sh', $to_write);
             chmod('yoda.sh', 0755);
-            $this->app['cli']->out('<green>Shared your wisdom with a shell script, I have.  Hmmmmmm.</green>');
+            $this->app['cli']->out('<green>[Yoda]</green> <white>Shared my wisdom with a shell script, I have.  Hmmmmmm.</white>');
         }
     }
 
