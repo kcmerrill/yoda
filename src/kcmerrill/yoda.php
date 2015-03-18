@@ -101,6 +101,7 @@ class yoda {
     }
 
     function update($env = false) {
+        $this->app['yaml']->smartConfig();
         $config = $this->app['yaml']->configFileContents($env);
         foreach($config as $container_name=>$container_config) {
             $update = is_array($container_config['update']) ? $container_config['update'] : array($container_config['update']);
