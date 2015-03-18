@@ -28,7 +28,12 @@ class yamlConfig {
                 't'=>true,
                 'i'=>true,
                 'entrypoint'=>'bash'
-            )
+            ),
+           'interactive'=>array(
+               'd'=>false,
+               't'=>true,
+               'i'=>true,
+           )
         )
     );
     var $custom = array(
