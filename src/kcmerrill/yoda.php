@@ -148,7 +148,7 @@ class yoda {
 
     function lift($env = false) {
         $this->app['yaml']->smartConfig();
-        $original_location = getcwd();        
+        $original_location = getcwd();
         $config = $this->app['yaml']->configFileContents($env);
         $setup = is_file('.yoda.setup');
         if(in_array('--force', $this->args) && $setup) {
@@ -182,7 +182,11 @@ class yoda {
         foreach($configs as $config) {
             $this->app['cli']->out('<green>[Yoda]</green> <white>Found ... ' . $config . '</white>');
             $this->app['shell']->cd(dirname($config));
-            $this->lift($this->modifier);
+            if(in_array('--update', $this->args)) {
+                $this->update($this->modifier);
+            } else {
+                $this->lift($this->modifier);
+            }
         }
     }
 
