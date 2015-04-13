@@ -5,7 +5,7 @@ docker-http:
  v: /var/run/docker.sock:/var/run/docker.sock
 automagicproxy:
  image: kcmerrill/automagicproxy
- pull: dockerfile/haproxy
+ pull: haproxy
  remove: true
  p: 80:80
  e:
