@@ -1,7 +1,0 @@
-rethinkdb:
- image: dockerfile/rethinkdb
- p:
-  - 8080:8080
-  - 28015:28015
-  - 29015:29015
- description: A rethinkdb. Use port 8080.
