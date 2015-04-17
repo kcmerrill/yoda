@@ -1,4 +1,4 @@
-#!/usr/bin/php
+#!/bin/env php
 <?php
 /*
  ::\`--._,'.::.`._.--'/::     Do or do not.
