@@ -116,6 +116,13 @@
                     <div>
                 <div>
                 <div class="command">
+                    <span class="blue-text">yoda clean [--loudly]</span>
+                    <div>
+                        Dangling images? Yoda clean will execute: docker rmi $(docker images -f "dangling=true" -q)
+                    <div>
+                <div>
+
+                <div class="command">
                     <span class="blue-text">yoda share username/package_name</span>
                     <div>
                         In a directory of a new .yoda file you've created, simply run the share command with your username and package name(no spaces). Once shared, this will allow other users to summon this particular yoda file from you!

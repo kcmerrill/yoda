@@ -230,6 +230,10 @@ class yoda {
         $this->app['shell']->execute($this->app['docker']->killall(), in_array('--loudly', $this->args));
     }
 
+    function clean($modifier = false) {
+        $this->app['shell']->execute($this->app['docker']->clean(), in_array('--loudly', $this->args));
+    }
+
     function speak() {
         if($this->spoke) {
             return true;
