@@ -20,6 +20,9 @@ yoda:
   remove: true
   control:
    - tail -f /var/log/apache2/error.log
+  notes:
+    - Your yoda repository is now running.
+    - Please visit yoda.$HOSTNAME for more details!
   env:
    access:
     control:

@@ -92,7 +92,7 @@ class shell {
             if(isset($configuration['notes'])){
                 $configuration['notes'] = is_array($configuration['notes']) ? $configuration['notes'] : array($configuration['notes']);
                 foreach($configuration['notes'] as $note) {
-                    $this->execute('echo "' . $note . '"', false, true, true);
+                    $this->execute('echo "' . $note . '"', true, true, true);
                 }
             }
         }
