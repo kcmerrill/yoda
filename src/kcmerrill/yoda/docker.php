@@ -26,8 +26,8 @@ class docker {
     function exec($container_name, $command = 'bash') {
         return "docker exec -t -i {$container_name} {$command}";
     }
-    function clean($image) {
-        return 'docker rmi $(docker images -f "dangling=true" -q)';
+    function clean($force = false) {
+        return 'docker rmi ' . ($force ? '-f ' : '') . '$(docker images -f "dangling=true" -q)';
     }
     function run($image, $options = array()){
         $options = is_array($options) ? $options : array();

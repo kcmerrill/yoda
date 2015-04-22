@@ -220,6 +220,12 @@ class yoda {
         return $folder;
     }
 
+    function inspect($project_name) {
+        $repos = $this->app['repos']->get();
+        $config_file = $this->app['yaml']->fetchConfigFile($project_name, $repos);
+        echo $config_file;
+    }
+
     function version($modifier = false) {
         $this->app['cli']->out('v' . $this->version);
         echo PHP_EOL;
@@ -231,7 +237,7 @@ class yoda {
     }
 
     function clean($modifier = false) {
-        $this->app['shell']->execute($this->app['docker']->clean(), in_array('--loudly', $this->args));
+        $this->app['shell']->execute($this->app['docker']->clean(in_array('--force',$this->args)), in_array('--loudly', $this->args));
     }
 
     function speak() {
