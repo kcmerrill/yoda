@@ -7,7 +7,8 @@
         "kcmerrill/events": "dev-master",
         "kcmerrill/config": "dev-master",
         "pimple/pimple": "3.0.*@dev",
-        "league/climate": "dev-master"
+        "league/climate": "dev-master",
+        "sebastian/diff": "*"
     },
     "autoload": {
         "psr-0": {"kcmerrill": "src/"}

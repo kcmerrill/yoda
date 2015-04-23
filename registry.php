@@ -12,6 +12,10 @@ use Pimple\Container;
 
 $app = new Container();
 
+$app['utility'] = function ($c) use ($app) {
+    return new kcmerrill\yoda\utility;
+};
+
 $app['updater'] = function ($c) use ($app) {
     return new kcmerrill\yoda\updater($app['config']);
 };

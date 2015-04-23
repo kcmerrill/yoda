@@ -226,6 +226,13 @@ class yoda {
         echo $config_file;
     }
 
+    function diff($project_name) {
+        $this->app['yaml']->smartConfig();
+        $repos = $this->app['repos']->get();
+        $config_file = $this->app['yaml']->fetchConfigFile($project_name, $repos);
+        $this->app['utility']->diff(file_get_contents('.yoda'), $config_file);
+    }
+
     function version($modifier = false) {
         $this->app['cli']->out('v' . $this->version);
         echo PHP_EOL;
