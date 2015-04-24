@@ -74,7 +74,6 @@ class instruct {
                     foreach($config['pull'] as $pull) {
                         $this->instructions['pull'][] = $this->docker->pull($pull);
                     }
-                    $this->instructions['pull'][] = $this->docker->pull($config['image']);
                 }
 
             }
