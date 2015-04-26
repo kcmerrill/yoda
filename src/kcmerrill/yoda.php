@@ -5,7 +5,7 @@ class yoda {
     var $app;
     var $action;
     var $modifier;
-    var $version = 0.05;
+    var $version = 0.0;
     var $args;
     var $spoke = false;
     var $lifted = array();
@@ -234,7 +234,8 @@ class yoda {
     }
 
     function version($modifier = false) {
-        $this->app['cli']->out('v' . $this->version);
+        chdir($this->app['config']->c('yoda.root_dir'));
+        $this->app['cli']->out('v' . "{$this->version}.0" . `git shortlog | grep -E '^[ ]+\w+' | wc -l`);
         echo PHP_EOL;
         $this->app['cli']->out('For help, please see <green>http://yoda.kcmerrill.com</green>');
     }
