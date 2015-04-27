@@ -199,6 +199,15 @@ class yoda {
         $this->app['shell']->executeInstructions($instructions, true);
     }
 
+    function pull($project_name) {
+        return $this->init($project_name);
+    }
+    function init($project_name) {
+        $repos = $this->app['repos']->get();
+        $this->app['yaml']->saveConfigFile($project_name, $repos);
+        $this->lift();
+    }
+
     function summon_all($to_find = false) {
         $repos = $this->app['repos']->get(true);
         $shares = $this->app['shares']->get($repos, $to_find);
