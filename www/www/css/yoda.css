@@ -130,6 +130,9 @@ body {
 .configuration .line-by-line div {
     padding: 5px 0px 5px 0px;
 }
+.command {
+    padding-bottom: 55px;
+}
 .commands .title{
     font-size:50px;
     padding-bottom:10px;

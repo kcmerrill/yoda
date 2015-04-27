@@ -117,7 +117,7 @@ class yoda {
         $this->find($to_find);
     }
 
-    function find($to_find = false) {
+    function find($to_find = false, $display = true) {
         $repos = $this->app['repos']->get(true);
         $shares = $this->app['shares']->get($repos, $to_find);
         foreach($shares as $share_name=>$share_data) {
@@ -128,6 +128,8 @@ class yoda {
             echo PHP_EOL;
         }
     }
+
+
 
     function export($env = false) {
         /* ToDo: Would be nice to export env name(but due to args, this will have to come later) */
@@ -197,7 +199,19 @@ class yoda {
         $this->app['shell']->executeInstructions($instructions, true);
     }
 
-    function summon($project_name) {
+    function summon_all($to_find = false) {
+        $repos = $this->app['repos']->get(true);
+        $shares = $this->app['shares']->get($repos, $to_find);
+        foreach($shares as $share_name=>$share_config) {
+            $this->app['cli']->out('<green>[Yoda]</green> <white>Found the project "'. $share_name .'" you seek, I have.  Hmmmmmm.</white>');
+            $this->summon($share_name, true);
+        }
+    }
+
+    function summon($project_name, $skip_all = false) {
+        if(!$skip_all && in_array('--all', $this->args)) {
+            return $this->summon_all($project_name);
+        }
         $folder = $project_name;
         if(strpos($folder, '/') === FALSE) {
             throw new \Exception('Only summon things that are name followed by project, I can!  Yeesssssss. ' . PHP_EOL . 'Eg: yoda summon db/mysql');

@@ -89,100 +89,116 @@
                     <span class="blue-text">yoda lift [env] [--loudly, --force, --export]</span>
                     <div>
                         Within the folder(or subfolder) that contains your .yoda configuration file, will run the .yoda file. Will perform builds, pulls, removes starts runs for you. Automagically.
-                    <div>
-                <div>
+                    </div>
+                </div>
                 <div class="command">
                     <span class="blue-text">yoda seek [env] [--loudly, --force, --export]</span>
                     <div>
                         Seek will go through, recursively, the folders from the directory you ran the seek in and perform a yoda lift [env] [--loudly, --force] on each of the .yoda files it finds. This is especially useful if you killed all the containers, or if your machine rebooted or you just need to bring up all of your enviornments at once. Of course, feel free to go into each folder and manually run a yoda lift [env] [--loudly, --force] individually.
-                    <div>
-                <div>
+                    </div>
+                </div>
                 <div class="command">
                     <span class="blue-text">yoda summon user/project [--loudly, --force, --export]</span>
                     <div>
                         Summon will allow you to fetch from a remote repository a specific yoda file, and perform a lift on it. Depending on the setup and configuration of the yoda file, it might go through and check out code for you, and get your enviornment setup for you. Take a look at the repositories below, for a list of availabe configurations that are available to you.
+                    </div>
+                </div>
+                <div class="command">
+                    <span class="blue-text">yoda summon user/project [--loudly, --force, --export, --all]</span>
                     <div>
-                <div>
+                        Summon will allow you to fetch from a remote repository a specific yoda file, and perform a lift on it. Depending on the setup and configuration of the yoda file, it might go through and check out code for you, and get your enviornment setup for you. Take a look at the repositories below, for a list of availabe configurations that are available to you.
+                    </div>
+                    <div>
+                        By using --all, replace user/project with a search term and summon all the projects that match. Useful if you know of a user or a repo you wish to summon all packages.
+                    </div>
+                </div>
+                <div class="command">
+                    <span class="blue-text">yoda summon-all user/project/search_term [--loudly, --force]</span>
+                    <div>
+                        Use summon-all with a search term and it will summon all the projects that match.
+                    </div>
+                    <div>
+                        Pro-Tip: Use yoda find user/project/search_term to do a "dry run" of the projects that you'll be downloading.
+                    </div>
+                </div>
                 <div class="command">
                     <span class="blue-text">yoda inspect user/project</span>
                     <div>
                         Read a repository yoda file before you summon it!
-                    <div>
-                <div>
+                    </div>
+                </div>
                 <div class="command">
                     <span class="blue-text">yoda diff user/project</span>
                     <div>
                         While in a project, you can diff yoru .yoda file to that which is in the repo. Handy if you want to summon, but not sure if there are changes or not
-                    <div>
-                <div>
-
+                    </div>
+                </div>
                 <div class="command">
                     <span class="blue-text">yoda control [env] [--loudly, --export]</span>
                     <div>
                         From within the project folder(or subfolder), yoda control will simply take your command and perform a docker exec -t -i _name_of_container_running_. There is a "control" keyword inside the .yoda file. You can specify commands by a yaml list. So for example, let say you needed to tail an apache log. Instead of hopping into the container, and tailing it each time. Simply set up the control.
-                    <div>
-                <div>
+                    </div>
+                </div>
                 <div class="command">
                     <span class="blue-text">yoda kill [--export]</span>
                     <div>
                         Sometimes you just need to nuke your workspace. This will kill all of the running docker containers.
-                    <div>
-                <div>
+                    </div>
+                </div>
                 <div class="command">
                     <span class="blue-text">yoda clean [--loudly]</span>
                     <div>
                         Dangling images? Yoda clean will execute: docker rmi $(docker images -f "dangling=true" -q)
-                    <div>
-                <div>
-
+                    </div>
+                </div>
                 <div class="command">
                     <span class="blue-text">yoda share username/package_name</span>
                     <div>
                         In a directory of a new .yoda file you've created, simply run the share command with your username and package name(no spaces). Once shared, this will allow other users to summon this particular yoda file from you!
-                    <div>
-                <div>
+                    </div>
+                </div>
                 <div class="command">
                     <span class="blue-text">yoda find [package_name]</span>
                     <div>
                         Displays a list of packages that you can summon. Once you find a package you like, then yoda summon user/package_name. This does not require a username/package_name. You an simply use a package name, but be careful in that if a user has multiple repositories, yours may be overwritten based on preference.
-                    <div>
-                <div>
+                    </div>
+                </div>
                 <div class="command">
                     <span class="blue-text">yoda search [package_name]</span>
                     <div>
                         <i>An alias to the find command.</i>
-                    <div>
-                <div>
+                    </div>
+                </div>
                 <div class="command">
                     <span class="blue-text">yoda update [env] [--export]</span>
                     <div>
                         <b>**NEW**</b> This will run the update commands within the yoda file. Useful for adding git submodule updates as an example.
-                    <div>
-                <div>
+                    </div>
+                </div>
                 <div class="command">
                     <span class="blue-text">yoda join [url]</span>
                     <div>
                         <b>**NEW**</b> Add a friends repository to yoda! Join their network, and instantly get access to their shared yoda files!
-                    <div>
-                <div>
+                    </div>
+                </div>
                 <div class="command">
                     <span class="blue-text">yoda leave [url]</span>
                     <div>
                         <b>**NEW**</b> Tired of a repository showing up in yoda find? Remove it by leaving their network!
-                    <div>
-                <div>
+                    </div>
+                </div>
                 <div class="command">
                     <span class="blue-text">yoda repos</span>
                     <div>
                         <b>**NEW**</b> Get a list of repositories that you've joined. By default, you get the master repository and the one on your local machine.
-                    <div>
-                <div>
+                    </div>
+                </div>
                 <div class="command">
                     <span class="blue-text">yoda export [env]</span>
                     <div>
                         <b>**NEW**</b> Not a fan of yoda? Don't have php installed on a specific box? Just need the .sh commands yoda is running? Export will put all of the commands into a yoda.sh file for you to modify and distribute seperatly.
-                    <div>
-                <div>
+                    </div>
+                </div>
             </div>
             <div class="parfait blue-bg">
                 <div class="screenshots speaking-text">
