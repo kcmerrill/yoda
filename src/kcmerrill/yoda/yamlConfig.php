@@ -21,8 +21,10 @@ class yamlConfig {
         'control'=>false,
         'update'=>array(),
         'require'=>array(),
-        /* Setup a debug env, useful for interactive mode */
         'env'=>array(
+            'this'=>array(
+                'require'=>array()
+            ),
             'debug'=>array(
                 'd'=>false,
                 't'=>true,
