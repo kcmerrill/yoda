@@ -192,10 +192,10 @@ class yoda {
         }
     }
 
-    function control() {
+    function control($modifier) {
         $this->app['yaml']->smartConfig();
-        $config = $this->app['yaml']->configFileContents($this->modifier);
-        $instructions = $this->app['instruct']->control($config, $this->modifier);
+        $config = $this->app['yaml']->configFileContents($modifier);
+        $instructions = $this->app['instruct']->control($config, $modifier);
         $this->app['shell']->executeInstructions($instructions, true);
     }
 
@@ -286,6 +286,7 @@ $this->app['cli']->out("
     }
 
     function __call($method, $params) {
-        throw new \Exception($method . '? I know not what you mean.');
+        $this->app['cli']->out('<green>[Yoda]</green> <white>Attempt to control <underline>' . $method . '</underline> I will</white>');
+        $this->control($method);
     }
 }
