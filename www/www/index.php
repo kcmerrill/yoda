@@ -65,7 +65,7 @@ function fetch_shares($to_search_for = false){
             }
         }
     }
-    return json_encode($shares, JSON_PRETTY_PRINT);
+    return json_encode($shares);
 
 }
 
