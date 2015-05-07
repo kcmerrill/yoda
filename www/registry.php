@@ -6,7 +6,7 @@ $app = new Silex\Application();
 
 $app['db'] = function ($c) {
     $capsule = new Capsule;
-    $capsule->addConnection([
+    $capsule->addConnection(array(
         'driver'    => 'mysql',
         'host'      => 'mysql',
         'database'  => 'yoda',
@@ -15,7 +15,7 @@ $app['db'] = function ($c) {
         'charset'   => 'utf8',
         'collation' => 'utf8_unicode_ci',
         'prefix'    => '',
-    ]);
+    ));
     $capsule->bootEloquent();
     $capsule->schema()->create('users', function($table) {
         $table->increments('id');

@@ -1,6 +1,7 @@
 {
     "require": {
-        "symfony/yaml": "3.0.*@dev",
+        "php": ">=5.3.9",
+        "symfony/yaml": "2.8.*@dev",
         "silex/silex": "~1.2"
     }
 }
