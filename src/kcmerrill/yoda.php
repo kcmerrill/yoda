@@ -42,7 +42,7 @@ class yoda {
         return $this->add_repo($repo);
     }
 
-    function add_repo($repo = false) {
+    function add($repo = false) {
         if($repo) {
             if($this->app['repos']->add($repo, $this->app['yaml'], $this->app['config'])) {
                 $this->app['cli']->out('<green>[Yoda]</green> <white>Added repository "'. $repo .'".</white>');
