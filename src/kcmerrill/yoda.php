@@ -31,6 +31,11 @@ class yoda {
 
     }
 
+    function edit() {
+        $this->app['yaml']->smartConfig();
+        $this->app['shell']->execute('$EDITOR .yoda', true, false, true);
+    }
+
     function repos() {
         $repos = $this->app['repos']->get();
         foreach($repos as $repo) {
