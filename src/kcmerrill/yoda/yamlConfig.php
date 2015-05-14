@@ -21,6 +21,7 @@ class yamlConfig {
         'control'=>false,
         'update'=>array(),
         'require'=>array(),
+        'lift'=>false,
         'env'=>array(
             'this'=>array(
                 'require'=>array()
@@ -39,7 +40,7 @@ class yamlConfig {
         )
     );
     var $custom = array(
-        'build','pull','remove','image','env','run','notes','prompt','prompt_password', 'success','setup','control','require','description','update'
+        'build','pull','remove','image','env','run','notes','prompt','prompt_password', 'success','setup','control','require','description','update','lift'
     );
 
     var $force_remove = false;

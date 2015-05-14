@@ -158,6 +158,7 @@ class yoda {
         $original_location = getcwd();
         $config = $this->app['yaml']->configFileContents($env);
         $setup = is_file('.yoda.setup');
+        $to_lift = array();
         if(in_array('--force', $this->args) && $setup) {
             unlink('.yoda.setup');
         }
@@ -174,13 +175,22 @@ class yoda {
                 $this->app['shell']->cd($original_location);
             }
             if(in_array($container_config['name'], $this->lifted)) {
-                unset($config[$container_name]); $this->app['cli']->out('<green>[Yoda]</green><white> ' . $container_config['name'] . ' already running ... </white>');
+                unset($config[$container_name]);
+                $this->app['cli']->out('<green>[Yoda]</green><white> ' . $container_config['name'] . ' already running ... </white>');
             } else {
                 $this->lifted[] = $container_config['name'];
+            }
+            // Any additional lifts we would need?
+            if(isset($container_config['lift']) && $container_config['lift']){
+                $to_lift = is_string($container_config['lift']) ? array($container_config['lift']) : $container_config['lift'];
             }
         }
         $instructions = $this->app['instruct']->lift($config);
         $this->app['shell']->executeLiftInstructions($instructions, $config, in_array('--loudly', $this->args));
+        foreach($to_lift as $env_to_lift) {
+            $this->app['cli']->out('<green>[Yoda]</green><white> Lifting now with </white><green> ' . $env_to_lift . '</green>');
+            $this->lift($env_to_lift);
+        }
         touch('.yoda.setup');
     }
 
