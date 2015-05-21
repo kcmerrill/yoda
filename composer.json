@@ -2,8 +2,7 @@
     "name": "kcmerrill/yoda",
     "description": "Docker made easy. Let the little man do the heavy lifting",
     "require": {
-        "php": ">=5.5.0",
-        "symfony/yaml": "3.0.*@dev",
+        "symfony/yaml": "2.8.*@dev",
         "kcmerrill/events": "dev-master",
         "kcmerrill/config": "dev-master",
         "pimple/pimple": "3.0.*@dev",
