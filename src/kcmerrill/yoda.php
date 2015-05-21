@@ -44,7 +44,7 @@ class yoda {
     }
 
     function join($repo = false) {
-        return $this->add_repo($repo);
+        return $this->add($repo);
     }
 
     function add($repo = false) {
