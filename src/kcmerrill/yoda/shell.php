@@ -45,6 +45,9 @@ class shell {
             return true;
         }
 
+        // print the command first
+        $this->cli->out('<green>[Do]</green> <white>' . $command . '</white>');
+
         if($interactive){
             passthru($command, $results);
         } else {
@@ -56,16 +59,14 @@ class shell {
             return $results;
         }
 
-        //Don't show the user the command, just in case
-        $command = str_replace('&> /dev/null', '', $command);
+        // check the status of the command. If it failed print the appropriate message
         if($results >= 1 && !$do_not_fail) {
-            $this->cli->out('<red>[Do Not]</red> <white>' . $command . '</white>');
+            $this->cli->out('<red>[Fail this did]</red> <white>' . $command . '</white>');
             exit(1);
         } else if($results >= 1) {
             $this->cli->out('<yellow>[Worry you should not]</yellow> <white>' . $command . '</white>');
-        }else {
-            $this->cli->out('<green>[Do]</green> <white>' . $command . '</white>');
         }
+
         return $results;
     }
 
