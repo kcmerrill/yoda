@@ -169,7 +169,7 @@ class yoda {
         }
 
         foreach($config as $container_name=>$container_config) {
-            $this->app['cli']->out('<green>[Yoda] lift </green><white>' . $container_name . ' ... </white>');
+            $this->app['cli']->out('<green>[Yoda] lifting </green><white>' . $container_name . ' ... </white>');
 
             $require = is_array($container_config['require']) ? $container_config['require'] : array($container_config['require']);
 
@@ -191,7 +191,6 @@ class yoda {
                 unset($config[$container_name]);
                 $this->app['cli']->out('<yellow>[Yoda]</yellow> ' . $container_config['name'] . ' already running');
             } else {
-                $this->app['cli']->out("<green>[Yoda] lift </green><white>$container_name Done.</white>");
                 $this->lifted[] = $container_config['name'];
             }
             // Any additional lifts we would need?
@@ -205,6 +204,7 @@ class yoda {
             $this->app['cli']->out('<green>[Yoda]</green><white> Lifting now with </white><green> ' . $env_to_lift . '</green>');
             $this->lift($env_to_lift);
         }
+        $this->app['cli']->out("<green>[Yoda] lift </green><white>" . implode(', ', array_keys($config)) . " done.</white>");
         touch('.yoda.setup');
     }
 
