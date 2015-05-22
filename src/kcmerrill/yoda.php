@@ -9,6 +9,7 @@ class yoda {
     var $args;
     var $spoke = false;
     var $lifted = array();
+    var $summoned = array();
     var $summoning = false;
 
     function __construct($app, $action = false, $modifier = false, $args = array()) {
@@ -188,8 +189,9 @@ class yoda {
             }
             if(in_array($container_config['name'], $this->lifted)) {
                 unset($config[$container_name]);
-                $this->app['cli']->out('<green>[Yoda]</green><white> ' . $container_config['name'] . ' already running ... </white>');
+                $this->app['cli']->out('<yellow>[Yoda]</yellow> ' . $container_config['name'] . ' already running');
             } else {
+                $this->app['cli']->out("<green>[Yoda] lift </green><white>$container_name Done.</white>");
                 $this->lifted[] = $container_config['name'];
             }
             // Any additional lifts we would need?
@@ -258,11 +260,15 @@ class yoda {
         list($user, $folder) = explode('/', $project_name, 2);
         $this->summoning = $folder;
 
+        if(in_array($project_name, $this->summoned)) {
+            $this->app['cli']->out("<yellow>[Yoda]</yellow> $project_name has already been summoned");
+            return $folder;
+        }
+
         // Does that project already exist?
         if(is_dir($folder) && !in_array('--force', $this->args)) {
 
-            $this->app['cli']->out("<yellow>[Yoda] summon </yellow><white>$project_name already exists</white>");
-            $this->app['cli']->out("<green>[Yoda] lift </green><white>$folder ... </white>");
+            $this->app['cli']->out("<green>[Yoda]</green> Found $project_name");
 
             // change into that projects dir and lift
             $this->app['shell']->cd(getcwd() . '/' . $folder);
@@ -280,6 +286,10 @@ class yoda {
             $this->app['yaml']->saveConfigFile($project_name, $repos);
             $this->lift($project_name);
         }
+
+        $this->app['cli']->out("<green>[Yoda] summon </green><white>$project_name Done.</white>");
+        $this->summoned[] = $project_name;
+
         return $folder;
     }
 
