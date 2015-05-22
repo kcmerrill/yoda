@@ -9,6 +9,7 @@ class yoda {
     var $args;
     var $spoke = false;
     var $lifted = array();
+    var $summoned = array();
     var $summoning = false;
 
     function __construct($app, $action = false, $modifier = false, $args = array()) {
@@ -162,8 +163,20 @@ class yoda {
         if(in_array('--force', $this->args) && $setup) {
             unlink('.yoda.setup');
         }
+
+        if (count($config) > 1) {
+            $this->app['cli']->out('<green>[Yoda]</green><white> This project has ' . count($config) . " containers:\n       - " . implode("\n       - ", array_keys($config)) . '<white>' );
+        }
+
         foreach($config as $container_name=>$container_config) {
+            $this->app['cli']->out('<green>[Yoda] lifting </green><white>' . $container_name . ' ... </white>');
+
             $require = is_array($container_config['require']) ? $container_config['require'] : array($container_config['require']);
+
+            if (count($require) > 0) {
+                $this->app['cli']->out("<green>[Yoda]</green> <white>$container_name depends on:\n       - " . implode("\n       - ", $require) . ' </white>');
+            }
+
             $required_project_folder = false;
             foreach($require as $req) {
                 $this->app['shell']->cd('../');
@@ -176,7 +189,7 @@ class yoda {
             }
             if(in_array($container_config['name'], $this->lifted)) {
                 unset($config[$container_name]);
-                $this->app['cli']->out('<green>[Yoda]</green><white> ' . $container_config['name'] . ' already running ... </white>');
+                $this->app['cli']->out('<yellow>[Yoda]</yellow> ' . $container_config['name'] . ' already running');
             } else {
                 $this->lifted[] = $container_config['name'];
             }
@@ -191,6 +204,7 @@ class yoda {
             $this->app['cli']->out('<green>[Yoda]</green><white> Lifting now with </white><green> ' . $env_to_lift . '</green>');
             $this->lift($env_to_lift);
         }
+        $this->app['cli']->out("<green>[Yoda] lift </green><white>" . implode(', ', array_keys($config)) . " done.</white>");
         touch('.yoda.setup');
     }
 
@@ -224,6 +238,8 @@ class yoda {
     }
 
     function summon_all($to_find = false) {
+        $this->app['cli']->out('<green>[Yoda]</green> <white>Summoning all ' . ($to_find ? $to_find . ' ' : '') . '...</white>');
+
         $repos = $this->app['repos']->get(true);
         $shares = $this->app['shares']->get($repos, $to_find);
         foreach($shares as $share_name=>$share_config) {
@@ -236,17 +252,32 @@ class yoda {
         if(!$skip_all && in_array('--all', $this->args)) {
             return $this->summon_all($project_name);
         }
-        $folder = $project_name;
-        if(strpos($folder, '/') === FALSE) {
+
+        if(strpos($project_name, '/') === FALSE) {
             throw new \Exception('Only summon things that are name followed by project, I can!  Yeesssssss. ' . PHP_EOL . 'Eg: yoda summon db/mysql');
-        } else {
-            list($user, $folder) = explode('/', $folder, 2);
-            $this->summoning = $folder;
         }
+
+        list($user, $folder) = explode('/', $project_name, 2);
+        $this->summoning = $folder;
+
+        if(in_array($project_name, $this->summoned)) {
+            $this->app['cli']->out("<yellow>[Yoda]</yellow> $project_name has already been summoned");
+            return $folder;
+        }
+
+        // Does that project already exist?
         if(is_dir($folder) && !in_array('--force', $this->args)) {
+
+            $this->app['cli']->out("<green>[Yoda]</green> Found $project_name");
+
+            // change into that projects dir and lift
             $this->app['shell']->cd(getcwd() . '/' . $folder);
             $this->lift($project_name);
         } else {
+
+            $this->app['cli']->out("<green>[Yoda] summon </green><white>$project_name ... </white>");
+
+            // create a folder for the project and lift it
             if(!is_file($folder)) {
                 @mkdir($folder, 0755, true);
             }
@@ -255,6 +286,10 @@ class yoda {
             $this->app['yaml']->saveConfigFile($project_name, $repos);
             $this->lift($project_name);
         }
+
+        $this->app['cli']->out("<green>[Yoda] summon </green><white>$project_name Done.</white>");
+        $this->summoned[] = $project_name;
+
         return $folder;
     }
 
@@ -292,7 +327,7 @@ class yoda {
         }
 $this->app['cli']->out("
            <green>.--.</green>
-   <green>\`--._,'.::.`._.--'/</green>       <green>[Do]</green> <white>||</white> <red>[Do Not]</red>
+   <green>\`--._,'.::.`._.--'/</green>       <green>[Do]</green> <white>||</white> <red>[*Did Not]</red>
      <green>.  ` __::__ '  .</green>          <white>There is </white>!<yellow>[Try]</yellow>
        <green>- .`'..`'. -</green>
          <green>\ `--' /</green>                      <white>-</white><green>Yoda</green>\n");
