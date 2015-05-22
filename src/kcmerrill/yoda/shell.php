@@ -51,7 +51,8 @@ class shell {
         if($interactive){
             passthru($command, $results);
         } else {
-            exec($command, $output, $results);
+            $command_redirect_error = $command .' 2>&1';
+            exec($command_redirect_error, $output, $results);
         }
 
         //Useful for prompts, etc
