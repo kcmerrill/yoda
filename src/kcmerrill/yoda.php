@@ -9,6 +9,7 @@ class yoda {
     var $args;
     var $spoke = false;
     var $lifted = array();
+    var $already_running = array();
     var $summoning = false;
 
     function __construct($app, $action = false, $modifier = false, $args = array()) {
@@ -21,6 +22,9 @@ class yoda {
         $this->app['updater']->check() ? $this->self_update() : NULL;
         /* Giddy Up! */
         try {
+            // Get the list of currently running containers
+            $this->already_running = $this->ps(true);
+
             $this->{$this->action}($modifier);
             if(in_array('--export', $this->args)) {
                 $this->export($modifier);
@@ -162,8 +166,20 @@ class yoda {
         if(in_array('--force', $this->args) && $setup) {
             unlink('.yoda.setup');
         }
+
+        if (count($config) > 1) {
+            $this->app['cli']->out('<green>[Yoda]</green><white> This project has ' . count($config) . " containers:\n       - " . implode("\n       - ", array_keys($config)) . '<white>' );
+        }
+
         foreach($config as $container_name=>$container_config) {
+            $this->app['cli']->out('<green>[Yoda] lift </green><white>' . $container_name . ' ... </white>');
+
             $require = is_array($container_config['require']) ? $container_config['require'] : array($container_config['require']);
+
+            if (count($require) > 0) {
+                $this->app['cli']->out("<green>[Yoda]</green> <white>$container_name depends on:\n       - " . implode("\n       - ", $require) . ' </white>');
+            }
+
             $required_project_folder = false;
             foreach($require as $req) {
                 $this->app['shell']->cd('../');
@@ -224,6 +240,8 @@ class yoda {
     }
 
     function summon_all($to_find = false) {
+        $this->app['cli']->out('<green>[Yoda]</green> <white>Summoning all ' . ($to_find ? $to_find . ' ' : '') . '...</white>');
+
         $repos = $this->app['repos']->get(true);
         $shares = $this->app['shares']->get($repos, $to_find);
         foreach($shares as $share_name=>$share_config) {
@@ -236,17 +254,28 @@ class yoda {
         if(!$skip_all && in_array('--all', $this->args)) {
             return $this->summon_all($project_name);
         }
-        $folder = $project_name;
-        if(strpos($folder, '/') === FALSE) {
+
+        if(strpos($project_name, '/') === FALSE) {
             throw new \Exception('Only summon things that are name followed by project, I can!  Yeesssssss. ' . PHP_EOL . 'Eg: yoda summon db/mysql');
-        } else {
-            list($user, $folder) = explode('/', $folder, 2);
-            $this->summoning = $folder;
         }
+
+        list($user, $folder) = explode('/', $project_name, 2);
+        $this->summoning = $folder;
+
+        // Does that project already exist?
         if(is_dir($folder) && !in_array('--force', $this->args)) {
+
+            $this->app['cli']->out("<yellow>[Yoda] summon </yellow><white>$project_name already exists</white>");
+            $this->app['cli']->out("<green>[Yoda] lift </green><white>$folder ... </white>");
+
+            // change into that projects dir and lift
             $this->app['shell']->cd(getcwd() . '/' . $folder);
             $this->lift($project_name);
         } else {
+
+            $this->app['cli']->out("<green>[Yoda] summon </green><white>$project_name ... </white>");
+
+            // create a folder for the project and lift it
             if(!is_file($folder)) {
                 @mkdir($folder, 0755, true);
             }
@@ -284,6 +313,14 @@ class yoda {
 
     function clean($modifier = false) {
         $this->app['shell']->execute($this->app['docker']->clean(in_array('--force',$this->args)), in_array('--loudly', $this->args));
+    }
+
+    function ps($return_array = false) {
+        $result = $this->app['shell']->execute($this->app['docker']->ps(), in_array('--loudly', $this->args));
+        if ($return_array) {
+            $results = explode(PHP_EOL, $result);
+            return $results;
+        }
     }
 
     function speak() {

@@ -62,6 +62,9 @@ class shell {
         // check the status of the command. If it failed print the appropriate message
         if($results >= 1 && !$do_not_fail) {
             $this->cli->out('<red>[Fail this did]</red> <white>' . $command . '</white>');
+            if (!$interactive && $output) {
+                $this->cli->out('<yellow>[Yoda] More info is available using --loudly</yellow>');
+            }
             exit(1);
         } else if($results >= 1) {
             $this->cli->out('<yellow>[Worry you should not]</yellow> <white>' . $command . '</white>');
