@@ -9,7 +9,6 @@ class yoda {
     var $args;
     var $spoke = false;
     var $lifted = array();
-    var $already_running = array();
     var $summoning = false;
 
     function __construct($app, $action = false, $modifier = false, $args = array()) {
@@ -22,9 +21,6 @@ class yoda {
         $this->app['updater']->check() ? $this->self_update() : NULL;
         /* Giddy Up! */
         try {
-            // Get the list of currently running containers
-            $this->already_running = $this->ps(true);
-
             $this->{$this->action}($modifier);
             if(in_array('--export', $this->args)) {
                 $this->export($modifier);
@@ -313,14 +309,6 @@ class yoda {
 
     function clean($modifier = false) {
         $this->app['shell']->execute($this->app['docker']->clean(in_array('--force',$this->args)), in_array('--loudly', $this->args));
-    }
-
-    function ps($return_array = false) {
-        $result = $this->app['shell']->execute($this->app['docker']->ps(), in_array('--loudly', $this->args));
-        if ($return_array) {
-            $results = explode(PHP_EOL, $result);
-            return $results;
-        }
     }
 
     function speak() {

@@ -47,7 +47,4 @@ class docker {
         $run_cmd[] = $image;
         return implode(' ', $run_cmd);
     }
-    function ps() {
-        return "docker ps";
-    }
 }

@@ -51,7 +51,7 @@ class shell {
         if($interactive){
             passthru($command, $results);
         } else {
-            exec($command . ($interactive ?  '' : ' &> /dev/null'), $output, $results);
+            exec($command, $output, $results);
         }
 
         //Useful for prompts, etc
