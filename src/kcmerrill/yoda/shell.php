@@ -46,7 +46,9 @@ class shell {
         }
 
         // print the command first
-        $this->cli->out('<green>[Do]</green> <white>' . $command . '</white>');
+        if(!$ignore_yoda_response) {
+            $this->cli->out('<green>[Do]</green> <white>' . $command . '</white>');
+        }
 
         if($interactive){
             passthru($command, $results);
@@ -62,7 +64,7 @@ class shell {
 
         // check the status of the command. If it failed print the appropriate message
         if($results >= 1 && !$do_not_fail) {
-            $this->cli->out('<red>[Fail this did]</red> <white>' . $command . '</white>');
+            $this->cli->out('<red>[Did Not]</red> <white>' . $command . '</white>');
             if (!$interactive && $output) {
                 $this->cli->out('<yellow>[Yoda] More info is available using --loudly</yellow>');
             }
