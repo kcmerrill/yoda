@@ -327,7 +327,7 @@ class yoda {
         }
 $this->app['cli']->out("
            <green>.--.</green>
-   <green>\`--._,'.::.`._.--'/</green>       <green>[Do]</green> <white>||</white> <red>[Do Not]</red>
+   <green>\`--._,'.::.`._.--'/</green>       <green>[Do]</green> <white>||</white> <red>[*Did Not]</red>
      <green>.  ` __::__ '  .</green>          <white>There is </white>!<yellow>[Try]</yellow>
        <green>- .`'..`'. -</green>
          <green>\ `--' /</green>                      <white>-</white><green>Yoda</green>\n");
