@@ -330,7 +330,7 @@ $this->app['cli']->out("
    <green>\`--._,'.::.`._.--'/</green>       <green>[Do]</green> <white>||</white> <red>[*Did Not]</red>
      <green>.  ` __::__ '  .</green>          <white>There is </white>!<yellow>[Try]</yellow>
        <green>- .`'..`'. -</green>
-         <green>\ `--' /</green>                      <white>-</white><green>Yoda</green>\n");
+         <green>\ `--' /</green>                      <white>-</white><green>Chewy</green>\n");
 
         $this->spoke = true;
     }
