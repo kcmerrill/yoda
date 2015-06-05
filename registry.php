@@ -51,8 +51,8 @@ $app['yaml'] = function($c) use ($argv, $app){
     return new kcmerrill\yoda\yamlConfig($app, in_array('--force', $argv));
 };
 
-$app['instruct'] = $app->factory(function($c) {
-    return new kcmerrill\yoda\instruct($c['docker']);
+$app['instruct'] = $app->factory(function($c) use ($argv) {
+    return new kcmerrill\yoda\instruct($c['docker'], $argv);
 });
 
 $app['shell'] = function($c) {

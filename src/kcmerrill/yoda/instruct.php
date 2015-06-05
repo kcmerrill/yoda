@@ -4,7 +4,10 @@ namespace kcmerrill\yoda;
 class instruct {
     var $docker;
     var $instructions;
-    function __construct($docker) {
+    var $args;
+
+    function __construct($docker, $args) {
+        $this->args = $args;
         $this->docker = $docker;
         $this->instructions = array(
             'prompt'=>array(),
@@ -21,13 +24,24 @@ class instruct {
         );
     }
 
+    function controlParse($command) {
+        if(is_array($this->args)) {
+            foreach($this->args as $index=>$value) {
+                $command = str_replace(':' . $index, $value, $command);
+            }
+            return $command;
+        } else {
+            return $command;
+        }
+    }
+
     function control($containers_configuration, $specific_env = false) {
         $control = array();
         if($specific_env && isset($containers_configuration['env'][$specific_env])) {
            $config = $containers_configuration[$specific_env];
            $config['control'] = is_array($config['control']) ? $config['control'] : array('bash');
            foreach($config['control'] as $command) {
-                $control[] = $this->docker->exec($config['name'], $command);
+                $control[] = $this->docker->exec($config['name'], $this->controlParse($command));
            }
         } else {
             $default_behavior = true;
@@ -35,7 +49,7 @@ class instruct {
                 $config = end($containers_configuration);
                 $config['control'] = is_array($config['control']) ? $config['control'] : array('bash');
                 foreach($config['control'] as $command) {
-                    $control[] = $this->docker->exec($config['name'], $command);
+                    $control[] = $this->docker->exec($config['name'], $this->controlParse($command));
                 }
             }
         }
