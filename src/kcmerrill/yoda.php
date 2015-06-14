@@ -154,6 +154,10 @@ class yoda {
         }
     }
 
+    function restart($env = false) {
+        $this->lift();
+    }
+
     function lift($env = false) {
         $this->app['yaml']->smartConfig();
         $original_location = getcwd();
