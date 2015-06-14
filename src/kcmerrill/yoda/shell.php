@@ -6,9 +6,11 @@ class shell {
     var $lifted = array();
     var $commands = array();
     var $dry_run = false;
+    var $docker = false;
 
-    function __construct($cli) {
+    function __construct($cli, $docker) {
         $this->cli = $cli;
+        $this->docker = $docker;
     }
 
     function dryRun($dry_run = false) {
@@ -101,6 +103,10 @@ class shell {
                 foreach($configuration['notes'] as $note) {
                     $this->execute('echo "' . $note . '"', true, true, true);
                 }
+            }
+            if(isset($configuration['push']) && $configuration['push']) {
+                echo $this->docker->push($configuration['image']) . ' wootwoot';
+                $this->execute($this->docker->push($configuration['image']), true);
             }
         }
     }

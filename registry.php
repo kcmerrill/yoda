@@ -56,7 +56,7 @@ $app['instruct'] = $app->factory(function($c) use ($argv) {
 });
 
 $app['shell'] = function($c) {
-    return new kcmerrill\yoda\shell($c['cli']);
+    return new kcmerrill\yoda\shell($c['cli'], $c['docker']);
 };
 
 $app['yoda'] = function($c) use($argv) {

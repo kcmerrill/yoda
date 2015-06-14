@@ -29,6 +29,9 @@ class docker {
     function clean($force = false) {
         return 'docker rmi ' . ($force ? '-f ' : '') . '$(docker images -f "dangling=true" -q)';
     }
+    function push($image) {
+        return 'docker push ' . $image;
+    }
     function run($image, $options = array()){
         $options = is_array($options) ? $options : array();
         $run_cmd = array('docker run');
