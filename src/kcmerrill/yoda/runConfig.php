@@ -4,7 +4,7 @@ namespace kcmerrill\yoda;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Yaml\Dumper;
 
-class yamlConfig {
+class runConfig {
     var $config_file = '.yoda';
     var $defaults = array(
         'build'=>false, // _do not_ build by default
