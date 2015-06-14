@@ -33,6 +33,10 @@ class docker {
         $options = is_array($options) ? $options : array();
         $run_cmd = array('docker run');
         foreach($options as $c=>$value) {
+            /* We need it, but not yet */
+            if($c == 'command') {
+                continue;
+            }
             $value = is_array($value) ? $value : array($value);
             foreach($value as $v){
                 if(is_bool($v) && $v == false)
@@ -45,6 +49,7 @@ class docker {
             }
         }
         $run_cmd[] = $image;
+        $run_cmd[] = $options['command'];
         return implode(' ', $run_cmd);
     }
 }
