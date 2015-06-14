@@ -105,7 +105,6 @@ class shell {
                 }
             }
             if(isset($configuration['push']) && $configuration['push']) {
-                echo $this->docker->push($configuration['image']) . ' wootwoot';
                 $this->execute($this->docker->push($configuration['image']), true);
             }
         }
