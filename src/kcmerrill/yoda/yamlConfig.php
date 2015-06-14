@@ -22,7 +22,7 @@ class yamlConfig {
         'update'=>array(),
         'require'=>array(),
         'lift'=>false,
-        'command'=>'',
+        'cmd'=>'',
         'push'=>false,
         'env'=>array(
             'this'=>array(
