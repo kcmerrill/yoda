@@ -233,6 +233,19 @@
                         An alias of yoda pull. Will pull a new fresh version of user/project .yoda file to the current location
                     </div>
                 </div>
+                <div class="command">
+                    <span class="blue-text">yoda config config.name</span>
+                    <div>
+                        <b>**NEW**</b> Not sure what a config value is set to? 'yoda config args.loudly' will display what args.loudly is set to.
+                    </div>
+                </div>
+
+                <div class="command">
+                    <span class="blue-text">yoda config config.name config.value</span>
+                    <div>
+                        <b>**NEW**</b> Will set yoda config.name to the config.value you pass through. Example: 'yoda config speak off' will turn off the yoda ascii art. 'yoda config args.loudly on' will make sure to make all yoda commands act as if they had --loudly enabled. You can disable that if you enable it by simply running 'yoda config args.loudly off' to disable it(--loudly if passed in as a cmd line argument will overwrite this)
+                    </div>
+                </div>
 
             </div>
             <div class="parfait blue-bg">
