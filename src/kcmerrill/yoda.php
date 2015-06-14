@@ -38,9 +38,9 @@ class yoda {
     }
 
     function repos() {
-        $repos = $this->app['repos']->get();
-        foreach($repos as $repo) {
-            $this->app['cli']->out('<green>[Yoda]</green> <white>' . $repo . '</white>');
+        $repos = $this->app['repos']->get(false, true);
+        foreach($repos as $repo=>$running) {
+            $this->app['cli']->out('<green>[Yoda]</green> <' . ($running ? 'white' : 'red') . '>' . $repo . '</' . ($running ? 'white' : 'red') . '>');
         }
     }
 

@@ -8,19 +8,32 @@ class repos {
         $this->config = $config;
     }
 
-    function get($reverse = false) {
+    function get($reverse = false, $running = false) {
         $repos = $this->config->get('yoda.repos', array());
         array_unshift($repos, 'yoda.kcmerrill.com');
         array_unshift($repos, 'yoda.' . gethostname());
         $repos = array_unique($repos);
-        return $reverse ?  array_reverse($repos) : $repos;
+        $repos = $reverse ?  array_reverse($repos) : $repos;
+        if($running) {
+            $validated = array_fill_keys($repos, false);
+            foreach($validated as $url=>$up) {
+                $validated[$url] = $this->valid($url);
+            }
+            return $validated;
+        } else {
+            return $repos;
+        }
+    }
+
+    function valid($repo) {
+        return file_get_contents('http://' . $repo . '/shares/') ? true : false;
     }
 
     function add($repo) {
         $repo = str_replace(array('http://','www.'), '', $repo);
 
         /* Do a simple test to see if it's a valid yoda repo */
-        if(!file_get_contents('http://' . $repo . '/shares/')) {
+        if(!$this->valid($repo)) {
             throw new \Exception('Invalid, the repository ' . $repo . ' is.');
         }
 
