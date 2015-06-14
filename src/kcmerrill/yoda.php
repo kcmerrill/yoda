@@ -33,7 +33,7 @@ class yoda {
     }
 
     function edit() {
-        $this->app['yaml']->smartConfig();
+        $this->app['run_config']->smartConfig();
         $this->app['shell']->execute('$EDITOR .yoda', true, false, true);
     }
 
@@ -50,7 +50,8 @@ class yoda {
 
     function add($repo = false) {
         if($repo) {
-            if($this->app['repos']->add($repo, $this->app['yaml'], $this->app['config'])) {
+            //TODO:: Move yaml save to the configuration class
+            if($this->app['repos']->add($repo, $this->app['run_config'], $this->app['config'])) {
                 $this->app['cli']->out('<green>[Yoda]</green> <white>Added repository "'. $repo .'".</white>');
             }
         } else {
@@ -64,7 +65,7 @@ class yoda {
 
     function remove_repo($repo = false) {
         if($repo) {
-            if($this->app['repos']->remove($repo, $this->app['yaml'], $this->app['config'])) {
+            if($this->app['repos']->remove($repo, $this->app['run_config'], $this->app['config'])) {
                 $this->app['cli']->out('<green>[Yoda]</green> <white>Removed repository "'. $repo .'".</white>');
             }
         } else {
@@ -107,8 +108,8 @@ class yoda {
     }
 
     function update($env = false) {
-        $this->app['yaml']->smartConfig();
-        $config = $this->app['yaml']->configFileContents($env);
+        $this->app['run_config']->smartConfig();
+        $config = $this->app['run_config']->configFileContents($env);
         foreach($config as $container_name=>$container_config) {
             $update = is_array($container_config['update']) ? $container_config['update'] : array($container_config['update']);
             foreach($update as $command) {
@@ -159,9 +160,9 @@ class yoda {
     }
 
     function lift($env = false) {
-        $this->app['yaml']->smartConfig();
+        $this->app['run_config']->smartConfig();
         $original_location = getcwd();
-        $config = $this->app['yaml']->configFileContents($env);
+        $config = $this->app['run_config']->configFileContents($env);
         $setup = is_file('.yoda.setup');
         $to_lift = array();
         if(in_array('--force', $this->args) && $setup) {
@@ -213,7 +214,7 @@ class yoda {
     }
 
     function seek() {
-        $configs = $this->app['yaml']->seekConfigFiles(getcwd());
+        $configs = $this->app['run_config']->seekConfigFiles(getcwd());
         foreach($configs as $config) {
             $this->app['cli']->out('<green>[Yoda]</green> <white>Found ... ' . $config . '</white>');
             $this->app['shell']->cd(dirname($config));
@@ -226,8 +227,8 @@ class yoda {
     }
 
     function control($modifier) {
-        $this->app['yaml']->smartConfig();
-        $config = $this->app['yaml']->configFileContents($modifier);
+        $this->app['run_config']->smartConfig();
+        $config = $this->app['run_config']->configFileContents($modifier);
         $instructions = $this->app['instruct']->control($config, $modifier);
         $this->app['shell']->executeInstructions($instructions, true);
     }
@@ -237,7 +238,7 @@ class yoda {
     }
     function init($project_name) {
         $repos = $this->app['repos']->get();
-        $this->app['yaml']->saveConfigFile($project_name, $repos);
+        $this->app['run_config']->saveConfigFile($project_name, $repos);
         $this->lift();
     }
 
@@ -287,7 +288,7 @@ class yoda {
             }
             $repos = $this->app['repos']->get();
             $this->app['shell']->cd(getcwd() . '/' . $folder);
-            $this->app['yaml']->saveConfigFile($project_name, $repos);
+            $this->app['run_config']->saveConfigFile($project_name, $repos);
             $this->lift($project_name);
         }
 
@@ -299,14 +300,14 @@ class yoda {
 
     function inspect($project_name) {
         $repos = $this->app['repos']->get();
-        $config_file = $this->app['yaml']->fetchConfigFile($project_name, $repos);
+        $config_file = $this->app['run_config']->fetchConfigFile($project_name, $repos);
         echo $config_file;
     }
 
     function diff($project_name) {
-        $this->app['yaml']->smartConfig();
+        $this->app['run_config']->smartConfig();
         $repos = $this->app['repos']->get();
-        $config_file = $this->app['yaml']->fetchConfigFile($project_name, $repos);
+        $config_file = $this->app['run_config']->fetchConfigFile($project_name, $repos);
         $this->app['utility']->diff(file_get_contents('.yoda'), $config_file);
     }
 

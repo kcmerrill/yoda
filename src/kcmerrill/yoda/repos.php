@@ -37,7 +37,5 @@ class repos {
         } else {
             throw new \Exception('Hmmmm. Having a problem writing the configuration file I am.');
         }
-
-
     }
 }

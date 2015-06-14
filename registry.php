@@ -47,8 +47,8 @@ $app['cli'] = function($c) {
     return new League\CLImate\CLImate;
 };
 
-$app['yaml'] = function($c) use ($argv, $app){
-    return new kcmerrill\yoda\yamlConfig($app, in_array('--force', $argv));
+$app['run_config'] = function($c) use ($argv, $app){
+    return new kcmerrill\yoda\runConfig($app, in_array('--force', $argv));
 };
 
 $app['instruct'] = $app->factory(function($c) use ($argv) {
