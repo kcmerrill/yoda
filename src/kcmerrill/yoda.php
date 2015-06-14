@@ -49,9 +49,13 @@ class yoda {
     }
 
     function add($repo = false) {
+        return $this->add_repo($repo);
+    }
+
+    function add_repo($repo = false) {
         if($repo) {
             //TODO:: Move yaml save to the configuration class
-            if($this->app['repos']->add($repo, $this->app['run_config'], $this->app['config'])) {
+            if($this->app['repos']->add($repo)) {
                 $this->app['cli']->out('<green>[Yoda]</green> <white>Added repository "'. $repo .'".</white>');
             }
         } else {
@@ -65,7 +69,7 @@ class yoda {
 
     function remove_repo($repo = false) {
         if($repo) {
-            if($this->app['repos']->remove($repo, $this->app['run_config'], $this->app['config'])) {
+            if($this->app['repos']->remove($repo)) {
                 $this->app['cli']->out('<green>[Yoda]</green> <white>Removed repository "'. $repo .'".</white>');
             }
         } else {

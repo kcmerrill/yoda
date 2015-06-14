@@ -3,6 +3,7 @@ namespace kcmerrill\yoda;
 
 class repos {
     var $config;
+
     function __construct($config) {
         $this->config = $config;
     }
@@ -15,27 +16,32 @@ class repos {
         return $reverse ?  array_reverse($repos) : $repos;
     }
 
-    function add($repo, $yaml, $config) {
+    function add($repo) {
         $repo = str_replace(array('http://','www.'), '', $repo);
-        $yoda = $config->c('yoda');
-        $yoda['repos'][] = $repo;
-        return $this->save($yoda['repos'], $yaml, $config);
+
+        /* Do a simple test to see if it's a valid yoda repo */
+        if(!file_get_contents('http://' . $repo . '/shares/')) {
+            throw new \Exception('Invalid, the repository ' . $repo . ' is.');
+        }
+
+        $repos = $this->config->c('yoda.repos');
+        $repos[] = $repo;
+        $this->config->c('yoda.repos', $repos);
+        return $this->save();
     }
-    function remove($repo, $yaml, $config) {
+
+    function remove($repo) {
         $repo = str_replace(array('http://','www.'), '', $repo);
-        $yoda = $config->c('yoda');
-        $yoda['repos'] = array_filter($yoda['repos'], function($r) use($repo) {
+        $yoda = $this->config->c('yoda');
+        $repos = array_filter($yoda['repos'], function($r) use($repo) {
             return $r != $repo;
         });
-        return $this->save($yoda['repos'], $yaml, $config);
+
+        $this->config->c('yoda.repos', $repos);
+        return $this->save();
     }
-    function save($repos, $yaml, $config) {
-        $yoda = $config->c('yoda');
-        $yoda['repos'] = $repos;
-        if($yaml->save($config->c('yoda.root_dir') . '/yoda.config', $yoda)){
-            return true;
-        } else {
-            throw new \Exception('Hmmmm. Having a problem writing the configuration file I am.');
-        }
+
+    function save() {
+        return $this->config->save('yoda', $this->config->c('yoda.root_dir') . DIRECTORY_SEPARATOR . $this->config->c('yoda.config_name'));
     }
 }

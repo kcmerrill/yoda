@@ -40,6 +40,7 @@ $app['config'] = function($c) {
     $config = new kcmerrill\utility\config(__DIR__, true);
     $config['yoda.root_dir'] = __DIR__;
     $config['yoda.initial_working_dir'] = getcwd();
+    $config['yoda.config_name'] = 'yoda.config';
     return $config;
 };
 
@@ -62,4 +63,3 @@ $app['shell'] = function($c) {
 $app['yoda'] = function($c) use($argv) {
     return new kcmerrill\yoda($c, isset($argv[1]) ? $argv[1] : 'version', isset($argv[2]) ? $argv[2] : false, $argv);
 };
-
