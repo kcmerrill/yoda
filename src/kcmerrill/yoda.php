@@ -17,6 +17,8 @@ class yoda {
         $this->action = str_replace('-','_',$action);
         $this->modifier = $modifier;
         $this->args = is_array($args) ? $args : array();
+        /* Enable config speak option here */
+        $this->spoke = $this->app['config']->get('yoda.speak', 'on') == 'on' ? false : true;
         $this->speak();
         /* Do we need to run the updater? */
         $this->app['updater']->check() ? $this->self_update() : NULL;
@@ -79,7 +81,7 @@ class yoda {
 
     function self_update($env = false) {
         $cwd = getcwd();
-        $root_dir = $this->app['config']->c('yoda.root_dir');
+        $root_dir = $this->app['config']->c('yoda.system.root_dir');
         $this->app['shell']->cd($root_dir);
         $this->app['cli']->out('<green>[Yoda]</green> <white>To update I need. herh.</white>');
         $this->app['shell']->execute('git pull', in_array('--loudly', $this->args));
@@ -89,7 +91,7 @@ class yoda {
     }
 
     function share($share_as = false) {
-        $root_dir = $this->app['config']->c('yoda.root_dir');
+        $root_dir = $this->app['config']->c('yoda.system.root_dir');
         $new_share = $root_dir . '/www/share/' . $share_as;
         if($share_as) {
             if(in_array('--force', $this->args) || !is_file($new_share)) {
@@ -140,11 +142,26 @@ class yoda {
         }
     }
 
+    function config($config) {
+        if(isset($this->args[2]) && isset($this->args[3])) {
+            /* meaning we should set the config */
+            $this->app['config']->set('yoda.' . $this->args[2], $this->args[3]);
+            if($this->app['config']->save('yoda', $this->app['config']->c('yoda.system.root_dir') . DIRECTORY_SEPARATOR . $this->app['config']->c('yoda.system.config_name'))) {
+                $this->app['cli']->out('<green>[Yoda]</green> <white>Set '. $this->args[2] .' to ' . $this->args[3] .'</white>');
+            } else {
+                throw new \Exception('Save your settings I cannot.');
+            }
+        } elseif(isset($this->args[2])) {
+            $this->app['cli']->out('<green>[Yoda]</green> <white>' . $this->args[2] . ' is set to ' . $this->app['config']->get('yoda.' . $this->args[2], '<red>n/a</red>') . '</white>');
+        } else {
+          throw new \Exception('Please specify a config to display');
+        }
+    }
 
 
     function export($env = false) {
         /* ToDo: Would be nice to export env name(but due to args, this will have to come later) */
-        $file_to_write = $this->app['config']->c('yoda.initial_working_dir') . DIRECTORY_SEPARATOR . 'yoda.sh';
+        $file_to_write = $this->app['config']->c('yoda.system.initial_working_dir') . DIRECTORY_SEPARATOR . 'yoda.sh';
         /* Don't actually run the commands */
         $this->app['shell']->dryRun(true);
         /* if someone calls this without a param only */
@@ -316,7 +333,7 @@ class yoda {
     }
 
     function version($modifier = false) {
-        chdir($this->app['config']->c('yoda.root_dir'));
+        chdir($this->app['config']->c('yoda.system.root_dir'));
         $this->app['cli']->out('v' . "{$this->version}.0" . `git shortlog | grep -E '^[ ]+\w+' | wc -l`);
         echo PHP_EOL;
         $this->app['cli']->out('For help, please see <green>http://yoda.kcmerrill.com</green>');

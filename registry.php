@@ -38,28 +38,41 @@ $app['events'] = function ($c) {
 
 $app['config'] = function($c) {
     $config = new kcmerrill\utility\config(__DIR__, true);
-    $config['yoda.root_dir'] = __DIR__;
-    $config['yoda.initial_working_dir'] = getcwd();
-    $config['yoda.config_name'] = 'yoda.config';
+    $config['yoda.system.root_dir'] = __DIR__;
+    $config['yoda.system.initial_working_dir'] = getcwd();
+    $config['yoda.system.config_name'] = 'yoda.config';
+    $config['yoda.speak'] = $config->get('yoda.speak', 'on');
+    $config['yoda.args.loudly'] = $config->get('yoda.args.loudly', 'off');
     return $config;
+};
+
+$app['argv'] = function($c) use ($argv) {
+    $yoda_default_args = $c['config']->get('yoda.args', array());
+    foreach($yoda_default_args as $a=>$v) {
+        if(strtolower($v) == 'on') {
+            $argv[] = '--' . $a;
+        }
+    }
+    return $argv;
 };
 
 $app['cli'] = function($c) {
     return new League\CLImate\CLImate;
 };
 
-$app['run_config'] = function($c) use ($argv, $app){
-    return new kcmerrill\yoda\runConfig($app, in_array('--force', $argv));
+$app['run_config'] = function($c) use ($app){
+    return new kcmerrill\yoda\runConfig($app, in_array('--force', $c['argv']));
 };
 
-$app['instruct'] = $app->factory(function($c) use ($argv) {
-    return new kcmerrill\yoda\instruct($c['docker'], $argv);
+$app['instruct'] = $app->factory(function($c) {
+    return new kcmerrill\yoda\instruct($c['docker'], $c['argv']);
 });
 
 $app['shell'] = function($c) {
     return new kcmerrill\yoda\shell($c['cli'], $c['docker']);
 };
 
-$app['yoda'] = function($c) use($argv) {
+$app['yoda'] = function($c) {
+    $argv = $c['argv'];
     return new kcmerrill\yoda($c, isset($argv[1]) ? $argv[1] : 'version', isset($argv[2]) ? $argv[2] : false, $argv);
 };

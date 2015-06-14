@@ -3,7 +3,7 @@ namespace kcmerrill\yoda;
 
 class shares {
     function __construct($config) {
-        $this->root_dir = $config->c('yoda.root_dir');
+        $this->root_dir = $config->c('yoda.system.root_dir');
     }
 
     function get($repos, $to_find = false){
