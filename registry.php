@@ -47,6 +47,10 @@ $app['config'] = function($c) {
 };
 
 $app['argv'] = function($c) use ($argv) {
+    if(count($argv) == 1) {
+        /* yoda command only(should display version) */
+        return $argv;
+    }
     $yoda_default_args = $c['config']->get('yoda.args', array());
     foreach($yoda_default_args as $a=>$v) {
         if(strtolower($v) == 'on') {

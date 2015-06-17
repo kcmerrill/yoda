@@ -313,7 +313,7 @@ class yoda {
             $this->lift($project_name);
         }
 
-        $this->app['cli']->out("<green>[Yoda] summon </green><white>$project_name Done.</white>");
+        $this->app['cli']->out("<green>[Yoda] summon </green><white>$project_name done.</white>");
         $this->summoned[] = $project_name;
 
         return $folder;
