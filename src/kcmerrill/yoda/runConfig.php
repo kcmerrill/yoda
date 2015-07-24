@@ -51,6 +51,9 @@ class runConfig {
     function __construct($app, $force_remove = false) {
         $this->app = $app;
         $this->force_remove = $force_remove;
+        if(is_array($this->app['config']->get('yoda.defaults', false))) {
+            $this->defaults = array_merge($this->defaults, $this->app['config']->get('yoda.defaults', array()));
+        }
     }
 
     function smartConfig(){
@@ -110,6 +113,12 @@ class runConfig {
                 throw new \Exception('An image, ' . $container_name . '  must have!');
             }
             $container_config = array_merge($this->defaults, $container_config);
+            /* Go through and setup some defaults env's */
+            foreach($this->defaults['env'] as $e_name=>$e_value) {
+                if(!isset($container_config['env'][$e_name])) {
+                    $container_config['env'][$e_name] = $e_value;
+                }
+            }
             if($this->force_remove) {
                 $container_config['remove'] = true;
             }
