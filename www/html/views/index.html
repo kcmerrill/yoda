@@ -157,9 +157,11 @@
                     </div>
                 </div>
                 <div class="command">
-                    <span class="blue-text">yoda clean [--loudly]</span>
+                    <span class="blue-text">yoda clean [--loudly, --force, --exited]</span>
                     <div>
                         Dangling images? Yoda clean will execute: docker rmi $(docker images -f "dangling=true" -q)
+                        <br/>
+                        With the flag --exited, yoda will attempt to remove all of your exited containers too
                     </div>
                 </div>
                 <div class="command">

@@ -91,6 +91,7 @@ class yoda {
     }
 
     function share($share_as = false) {
+        $this->app['run_config']->smartConfig();
         $root_dir = $this->app['config']->c('yoda.system.root_dir');
         $new_share = $root_dir . '/www/share/' . $share_as;
         if($share_as) {
@@ -344,7 +345,10 @@ class yoda {
     }
 
     function clean($modifier = false) {
-        $this->app['shell']->execute($this->app['docker']->clean(in_array('--force',$this->args)), in_array('--loudly', $this->args));
+        $this->app['shell']->execute($this->app['docker']->cleanDangling(in_array('--force',$this->args)), in_array('--loudly', $this->args), false, true);
+        if(in_array('--exited', $this->args)) {
+            $this->app['shell']->execute($this->app['docker']->cleanExited(in_array('--force',$this->args)), in_array('--loudly', $this->args), false, true);
+        }
     }
 
     function speak() {

@@ -16,8 +16,10 @@ yoda:
   h: ${HOSTNAME}
   P: true
   v:
-   - $PWD:/var/www/html
+   - $PWD:/var/www
   remove: true
+  setup:
+   - docker run -v $PWD:/app composer/composer update
   control:
    - tail -f /var/log/apache2/error.log
   notes:

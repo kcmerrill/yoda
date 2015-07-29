@@ -26,8 +26,11 @@ class docker {
     function exec($container_name, $command = 'bash') {
         return "docker exec -t -i {$container_name} {$command}";
     }
-    function clean($force = false) {
+    function cleanDangling($force = false) {
         return 'docker rmi ' . ($force ? '-f ' : '') . '$(docker images -f "dangling=true" -q)';
+    }
+    function cleanExited() {
+        return 'docker rm ' . ($force ? '-f ' : '') . ' $(docker ps --all -q -f status=exited)';
     }
     function push($image) {
         return 'docker push ' . $image;
