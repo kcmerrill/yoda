@@ -133,6 +133,7 @@ class yoda {
     }
 
     function find($to_find = false, $display = true) {
+        $to_find = strpos($to_find, '--') === 0 ? false : $to_find;
         $repos = $this->app['repos']->get(true);
         $shares = $this->app['shares']->get($repos, $to_find);
         foreach($shares as $share_name=>$share_data) {
