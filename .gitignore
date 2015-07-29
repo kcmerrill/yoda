@@ -2,7 +2,7 @@ composer.phar
 composer.lock
 yoda.setup
 vendor/
-www/share/rp*
+www/share/*
 *.setup
 www/share/rp/*
 yoda.last_updated

@@ -85,7 +85,8 @@ class yoda {
         $this->app['shell']->cd($root_dir);
         $this->app['cli']->out('<green>[Yoda]</green> <white>To update I need. herh.</white>');
         $this->app['shell']->execute('git pull', in_array('--loudly', $this->args));
-        $this->app['shell']->execute('./composer update', in_array('--loudly', $this->args));
+        $this->app['shell']->execute('docker run -v $PWD:/app composer/composer update', in_array('--loudly', $this->args));
+        $this->app['shell']->execute('docker run -v $PWD/www:/app composer/composer update', in_array('--loudly', $this->args));
         $this->app['shell']->cd($cwd);
         touch($root_dir . '/yoda.last_updated');
     }
