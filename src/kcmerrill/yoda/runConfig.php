@@ -21,6 +21,7 @@ class runConfig {
         'control'=>false,
         'update'=>array(),
         'require'=>array(),
+        'restart'=>'always',
         'lift'=>false,
         'cmd'=>'',
         'push'=>false,
@@ -32,12 +33,15 @@ class runConfig {
                 'd'=>false,
                 't'=>true,
                 'i'=>true,
-                'entrypoint'=>'bash'
+                'entrypoint'=>'bash',
+                'restart'=>'no'
+
             ),
            'interactive'=>array(
                'd'=>false,
                't'=>true,
                'i'=>true,
+               'restart'=>'no'
            )
         )
     );
