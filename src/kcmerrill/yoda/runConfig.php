@@ -56,7 +56,7 @@ class runConfig {
         $this->app = $app;
         $this->force_remove = $force_remove;
         if(is_array($this->app['config']->get('yoda.defaults', false))) {
-            $this->defaults = array_merge($this->defaults, $this->app['config']->get('yoda.defaults', array()));
+            $this->defaults = array_replace_recursive($this->defaults, $this->app['config']->get('yoda.defaults', array()));
         }
     }
 

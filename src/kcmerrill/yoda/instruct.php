@@ -11,6 +11,7 @@ class instruct {
         $this->docker = $docker;
         $this->instructions = array(
             'prompt'=>array(),
+            'export'=>array(),
             'setup'=>array(),
             'pull'=>array(),
             'build'=>array(),
@@ -58,20 +59,6 @@ class instruct {
     function lift($containers_configuration) {
        $setup = is_file('.yoda.setup');
        foreach($containers_configuration as $container=>$config) {
-            if(!$setup && $config['prompt']) {
-                foreach($config['prompt'] as $read=>$question) {
-                    $this->instructions['prompt'][] = 'echo "' . $question . '"';
-                    $this->instructions['prompt'][] = 'read ' . $read;
-                }
-            }
-            if(!$setup && $config['prompt_password']) {
-                foreach($config['prompt_password'] as $read=>$question) {
-                    $this->instructions['prompt'][] = 'echo "' . $question . '"';
-                    $this->instructions['prompt'][] = 'stty -echo';
-                    $this->instructions['prompt'][] = 'read ' . $read;
-                    $this->instructions['prompt'][] = 'stty echo';
-                }
-            }
             if(!$setup && $config['setup']) {
                 if(is_string($config['setup'])) {
                     $config['setup'] = array($config['setup']);
