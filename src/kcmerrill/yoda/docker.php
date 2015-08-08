@@ -21,7 +21,7 @@ class docker {
         return "docker build -t {$image} {$dockerfile}";
     }
     function remove($container_name) {
-        return "docker rm -f {$container_name}";
+        return "docker rm -f {$container_name} --volume";
     }
     function exec($container_name, $command = 'bash') {
         return "docker exec -t -i {$container_name} {$command}";
