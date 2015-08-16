@@ -7,10 +7,8 @@ www/share/*
 www/share/rp/*
 yoda.last_updated
 */.DS_STORE
-
 yoda.config
-
 yoda.sh
-
 www/yoda.sh
 www/share/*
+www/share

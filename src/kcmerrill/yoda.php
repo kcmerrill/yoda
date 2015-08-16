@@ -11,6 +11,7 @@ class yoda {
     var $lifted = array();
     var $summoned = array();
     var $summoning = false;
+    var $meta = '.yoda.meta';
 
     function __construct($app, $action = false, $modifier = false, $args = array()) {
         $this->app = $app;
@@ -187,10 +188,10 @@ class yoda {
         $this->app['run_config']->smartConfig();
         $original_location = getcwd();
         $config = $this->app['run_config']->configFileContents($env);
-        $setup = is_file('.yoda.setup');
+        $setup = is_file($this->meta);
         $to_lift = array();
         if(in_array('--force', $this->args) && $setup) {
-            unlink('.yoda.setup');
+            unlink($this->meta);
         }
 
         if (count($config) > 1) {
@@ -227,14 +228,14 @@ class yoda {
                 $to_lift = is_string($container_config['lift']) ? array($container_config['lift']) : $container_config['lift'];
             }
         }
-        $instructions = $this->app['instruct']->lift($config);
+        $instructions = $this->app['instruct']->lift($config, $this->meta);
         $this->app['shell']->executeLiftInstructions($instructions, $config, in_array('--loudly', $this->args));
         foreach($to_lift as $env_to_lift) {
             $this->app['cli']->out('<green>[Yoda]</green><white> Lifting now with </white><green> ' . $env_to_lift . '</green>');
             $this->lift($env_to_lift);
         }
         $this->app['cli']->out("<green>[Yoda] lift </green><white>" . implode(', ', array_keys($config)) . " done.</white>");
-        touch('.yoda.setup');
+        touch($this->meta);
     }
 
     function seek() {

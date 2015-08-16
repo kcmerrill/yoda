@@ -56,8 +56,8 @@ class instruct {
         }
         return $control;
     }
-    function lift($containers_configuration) {
-       $setup = is_file('.yoda.setup');
+    function lift($containers_configuration, $meta_file) {
+       $setup = is_file($meta_file);
        foreach($containers_configuration as $container=>$config) {
             if(!$setup && $config['setup']) {
                 if(is_string($config['setup'])) {
