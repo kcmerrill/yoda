@@ -6,11 +6,10 @@ use SebastianBergmann\Diff\Differ;
 class utility {
     function diff($old, $new, $print = true) {
        $differ = new Differ;
-       $diff = $differ->diff($old, $new);
        if($print) {
-        echo $diff;
+           echo $differ->diff($old, $new);
        } else {
-        return $diff;
+           return $differ->diffToArray($old, $new);
        }
     }
 }

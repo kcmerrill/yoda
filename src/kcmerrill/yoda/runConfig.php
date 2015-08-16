@@ -95,7 +95,7 @@ class runConfig {
 
     function saveConfigFile($shared, $repos){
         $config_file = $this->fetchConfigFile($shared, $repos);
-        file_put_contents('.yoda', $config_file);
+        return file_put_contents('.yoda', $config_file);
     }
 
     function seekConfigFiles($cwd) {

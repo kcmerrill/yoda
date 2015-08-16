@@ -11,7 +11,7 @@ class yoda {
     var $lifted = array();
     var $summoned = array();
     var $summoning = false;
-    var $meta = '.yoda.meta';
+    var $meta_config = '.yoda.setup';
 
     function __construct($app, $action = false, $modifier = false, $args = array()) {
         $this->app = $app;
@@ -25,6 +25,7 @@ class yoda {
         $this->app['updater']->check() ? $this->self_update() : NULL;
         /* Giddy Up! */
         try {
+            $modifier = strpos($modifier, '--') === 0 ? false : $modifier;
             $this->{$this->action}($modifier);
             if(in_array('--export', $this->args)) {
                 $this->export($modifier);
@@ -57,7 +58,6 @@ class yoda {
 
     function add_repo($repo = false) {
         if($repo) {
-            //TODO:: Move yaml save to the configuration class
             if($this->app['repos']->add($repo)) {
                 $this->app['cli']->out('<green>[Yoda]</green> <white>Added repository "'. $repo .'".</white>');
             }
@@ -134,7 +134,6 @@ class yoda {
     }
 
     function find($to_find = false, $display = true) {
-        $to_find = strpos($to_find, '--') === 0 ? false : $to_find;
         $repos = $this->app['repos']->get(true);
         $shares = $this->app['shares']->get($repos, $to_find);
         foreach($shares as $share_name=>$share_data) {
@@ -186,12 +185,19 @@ class yoda {
 
     function lift($env = false) {
         $this->app['run_config']->smartConfig();
+        /* Try to load a config if we can */
+        $setup = is_file($this->meta_config);
+        $meta = $this->app['meta'];
+        $meta->loadConfigFile($this->meta_config, 'meta');
         $original_location = getcwd();
+        if(!$this->summoning && $meta->get('meta.project.name', false)) {
+            $this->diff(false, false);
+        }
         $config = $this->app['run_config']->configFileContents($env);
-        $setup = is_file($this->meta);
         $to_lift = array();
+
         if(in_array('--force', $this->args) && $setup) {
-            unlink($this->meta);
+            unlink($this->meta_config);
         }
 
         if (count($config) > 1) {
@@ -228,14 +234,17 @@ class yoda {
                 $to_lift = is_string($container_config['lift']) ? array($container_config['lift']) : $container_config['lift'];
             }
         }
-        $instructions = $this->app['instruct']->lift($config, $this->meta);
+        $instructions = $this->app['instruct']->lift($config, $this->meta_config);
         $this->app['shell']->executeLiftInstructions($instructions, $config, in_array('--loudly', $this->args));
         foreach($to_lift as $env_to_lift) {
             $this->app['cli']->out('<green>[Yoda]</green><white> Lifting now with </white><green> ' . $env_to_lift . '</green>');
             $this->lift($env_to_lift);
         }
         $this->app['cli']->out("<green>[Yoda] lift </green><white>" . implode(', ', array_keys($config)) . " done.</white>");
-        touch($this->meta);
+        touch($this->meta_config);
+        $meta->set('meta.lifted', date("F j, Y, g:i a"));
+        $meta->save('meta', $this->meta_config);
+
     }
 
     function seek() {
@@ -259,12 +268,24 @@ class yoda {
     }
 
     function pull($project_name) {
-        return $this->init($project_name);
+        return $this->init($project_name, true);
     }
-    function init($project_name) {
+
+    function init($project_name, $lift = false) {
+        $meta = $this->app['meta'];
+        $meta->loadConfigFile($this->meta_config, 'meta');
+        if(!$project_name) {
+            $project_name = $meta->get('meta.project.name', false);
+        }
         $repos = $this->app['repos']->get();
-        $this->app['run_config']->saveConfigFile($project_name, $repos);
-        $this->lift();
+        $config_file = $this->app['run_config']->saveConfigFile($project_name, $repos);
+        $this->app['cli']->out('<green>[Yoda]</green><white> Fresh configuration file, pulled, have I.  Yes, hmmm.</white>');
+        $meta->set('meta.project.name', $project_name);
+        $meta->set('meta.project.hash', md5(file_get_contents('.yoda')));
+        $meta->save('meta', $this->meta_config);
+        if($lift) {
+            $this->lift();
+        }
     }
 
     function summon_all($to_find = false) {
@@ -289,7 +310,6 @@ class yoda {
 
         list($user, $folder) = explode('/', $project_name, 2);
         $this->summoning = $folder;
-
         if(in_array($project_name, $this->summoned)) {
             $this->app['cli']->out("<yellow>[Yoda]</yellow> $project_name has already been summoned");
             return $folder;
@@ -304,22 +324,24 @@ class yoda {
             $this->app['shell']->cd(getcwd() . '/' . $folder);
             $this->lift($project_name);
         } else {
-
+            $meta = $this->app['meta'];
             $this->app['cli']->out("<green>[Yoda] summon </green><white>$project_name ... </white>");
 
             // create a folder for the project and lift it
             if(!is_file($folder)) {
                 @mkdir($folder, 0755, true);
             }
-            $repos = $this->app['repos']->get();
+
             $this->app['shell']->cd(getcwd() . '/' . $folder);
-            $this->app['run_config']->saveConfigFile($project_name, $repos);
+            $config_file = $this->app['run_config']->saveConfigFile($project_name, $this->app['repos']->get());
+            $meta->set('meta.project.name', $project_name);
+            $meta->set('meta.project.hash', md5($config_file));
+            $meta->save('meta', $this->meta_config);
             $this->lift($project_name);
         }
 
         $this->app['cli']->out("<green>[Yoda] summon </green><white>$project_name done.</white>");
         $this->summoned[] = $project_name;
-
         return $folder;
     }
 
@@ -329,11 +351,34 @@ class yoda {
         echo $config_file;
     }
 
-    function diff($project_name) {
+    function diff($project_name = false, $display = true) {
         $this->app['run_config']->smartConfig();
-        $repos = $this->app['repos']->get();
-        $config_file = $this->app['run_config']->fetchConfigFile($project_name, $repos);
-        $this->app['utility']->diff(file_get_contents('.yoda'), $config_file);
+        $meta = false;
+        if(!$project_name) {
+            $meta = $this->app['meta'];
+            $meta->loadConfigFile($this->meta_config, 'meta');
+            $project_name = $meta->get('meta.project.name', false);
+        }
+        $config_file = $this->app['run_config']->fetchConfigFile($project_name, $this->app['repos']->get());
+        $current_config_file = file_get_contents('.yoda');
+        if($display) {
+            $this->app['utility']->diff($current_config_file, $config_file);
+        } else {
+            /* Ok ... lets calculate some changes */
+            if($meta) {
+                if($config_file == $current_config_file) {
+                    return false;
+                } elseif($meta['meta.project.hash'] != md5($current_config_file)) {
+                    /* You've updated it is my guess */
+                    $this->app['cli']->out('<green>[Yoda]</green> <yellow>Out of date, your configuration file is. With updates you have made. </yellow>');
+                    $this->app['cli']->out('<green>[Yoda]</green> <yellow>Use yoda diff to see the changes, made, you have.</yellow>');
+                    return false;
+                } else {
+                    $this->app['cli']->out('<green>[Yoda]</green> <yellow>Out of date, your configuration file is.  Update it, I will. </yellow>');
+                    $this->init(false, false);
+                }
+            }
+        }
     }
 
     function version($modifier = false) {

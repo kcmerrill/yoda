@@ -46,6 +46,12 @@ $app['config'] = function($c) {
     return $config;
 };
 
+$app['meta'] = $app->factory(function($c) {
+    $meta = new kcmerrill\utility\config;
+    $meta->isYaml();
+    return $meta;
+});
+
 $app['argv'] = function($c) use ($argv) {
     if(count($argv) == 1) {
         /* yoda command only(should display version) */
