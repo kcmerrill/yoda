@@ -234,15 +234,17 @@ class yoda {
                 $to_lift = is_string($container_config['lift']) ? array($container_config['lift']) : $container_config['lift'];
             }
         }
-        $instructions = $this->app['instruct']->lift($config, $this->meta_config);
+        $instructions = $this->app['instruct']->lift($config, $meta->get('meta.setup', false));
         $this->app['shell']->executeLiftInstructions($instructions, $config, in_array('--loudly', $this->args));
         foreach($to_lift as $env_to_lift) {
             $this->app['cli']->out('<green>[Yoda]</green><white> Lifting now with </white><green> ' . $env_to_lift . '</green>');
             $this->lift($env_to_lift);
         }
         $this->app['cli']->out("<green>[Yoda] lift </green><white>" . implode(', ', array_keys($config)) . " done.</white>");
-        touch($this->meta_config);
         $meta->set('meta.lifted', date("F j, Y, g:i a"));
+        if($meta->get('meta.setup', false)) {
+            $meta->set('meta.setup', date("F j, Y, g:i a"));
+        }
         $meta->save('meta', $this->meta_config);
 
     }
