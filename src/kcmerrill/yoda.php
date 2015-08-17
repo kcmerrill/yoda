@@ -184,6 +184,7 @@ class yoda {
     }
 
     function lift($env = false) {
+        $env = $env ? $env : $this->app['config']->get('yoda.env', false);
         $this->app['run_config']->smartConfig();
         /* Try to load a config if we can */
         $setup = is_file($this->meta_config);
