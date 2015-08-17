@@ -242,7 +242,7 @@ class yoda {
         }
         $this->app['cli']->out("<green>[Yoda] lift </green><white>" . implode(', ', array_keys($config)) . " done.</white>");
         $meta->set('meta.lifted', date("F j, Y, g:i a"));
-        if($meta->get('meta.setup', false)) {
+        if($meta->get('meta.setup', true)) {
             $meta->set('meta.setup', date("F j, Y, g:i a"));
         }
         $meta->save('meta', $this->meta_config);
