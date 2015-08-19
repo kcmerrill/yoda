@@ -21,7 +21,7 @@ class runConfig {
         'control'=>false,
         'update'=>array(),
         'require'=>array(),
-        'restart'=>'always',
+        'restart'=>'on-failure:5',
         'lift'=>false,
         'cmd'=>'',
         'push'=>false,
