@@ -264,6 +264,7 @@ class yoda {
     }
 
     function control($modifier) {
+        $modifier = $modifier ? $modifier : $this->app['config']->get('yoda.env', false);
         $this->app['run_config']->smartConfig();
         $config = $this->app['run_config']->configFileContents($modifier);
         $instructions = $this->app['instruct']->control($config, $modifier);
