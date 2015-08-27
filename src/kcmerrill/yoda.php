@@ -10,6 +10,7 @@ class yoda {
     var $spoke = false;
     var $lifted = array();
     var $summoned = array();
+    var $updated = array();
     var $summoning = false;
     var $meta_config = '.yoda.setup';
 
@@ -119,14 +120,56 @@ class yoda {
     function update($env = false) {
         $this->app['run_config']->smartConfig();
         $config = $this->app['run_config']->configFileContents($env);
-        foreach($config as $container_name=>$container_config) {
-            $update = is_array($container_config['update']) ? $container_config['update'] : array($container_config['update']);
-            foreach($update as $command) {
-                $this->app['shell']->execute($command, in_array('--loudly', $this->args));
-            }
+        $original_location = getcwd();
+
+        if (count($config) > 1) {
+            $this->app['cli']->out('<green>[Yoda]</green><white> This project has ' . count($config) . " containers:\n       - " . implode("\n       - ", array_keys($config)) . '<white>' );
         }
-        /* Perform a lift to get the updated changes */
-        $this->lift($env);
+
+        foreach($config as $container_name=>$container_config) {
+            // Have we updated this already?
+            if(in_array($container_name, $this->updated)) {
+                $this->app['cli']->out('<yellow>[Yoda]</yellow> ' . $container_name . ' already updated');
+                continue;
+            }
+
+            // Do we know how to update it?
+            $update = is_array($container_config['update']) ? $container_config['update'] : array($container_config['update']);
+            if (count($update) > 0) {
+
+                // Yes we do! Start the update
+                $this->app['cli']->out('<green>[Yoda] updating </green><white>' . $container_name . ' ... </white>');
+
+                // Update this project
+                foreach($update as $command) {
+                    $this->app['shell']->execute($command, in_array('--loudly', $this->args));
+                }
+
+                // Done updating
+                $this->app['cli']->out('<green>[Yoda] update</green><white> ' . $container_name . ' updated. </white>');
+
+            } else {
+
+                // We don't have instructions on how to update this project
+                $this->app['cli']->out('<yellow>[Yoda]</yellow> Yoda does not know how to update ' . $container_name);
+            }
+
+            // Update all the required projects as well
+            $require = is_array($container_config['require']) ? $container_config['require'] : array($container_config['require']);
+            if (count($require) > 0) {
+                $this->app['cli']->out("<green>[Yoda]</green> <white>$container_name depends on:\n       - " . implode("\n       - ", $require) . ' </white>');
+            }
+            foreach($require as $req) {
+                list($user, $folder) = explode('/', $req, 2);
+                $this->app['shell']->cd(getcwd() . '/../' . $folder);
+                $this->update($env);
+                $this->app['shell']->cd($original_location);
+            }
+
+            // Mark this as done so we don't update it again
+            $this->updated[] = $container_name;
+        }
+
     }
 
     function search($to_find = false) {
