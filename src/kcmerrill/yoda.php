@@ -39,7 +39,10 @@ class yoda {
 
     function edit() {
         $this->app['run_config']->smartConfig();
-        $this->app['shell']->execute('$EDITOR .yoda', true, false, true);
+        /* Set default yoda editor to vim */
+        $editor = $this->app['config']->get('yoda.editor','vim');
+        $this->app['shell']->execute($editor . ' .yoda', true, false, true);
+        $this->app['cli']->out('<green>[Yoda]</green> <white>Run "yoda config editor <editor_name>" to update</white>');
     }
 
     function repos() {
