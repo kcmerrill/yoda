@@ -6,7 +6,7 @@ class docker {
         return "docker stop {$container_name}";
     }
     function start($container_name, $silent = true) {
-        return "docker start {$container_name} &> /dev/null";
+        return "docker start {$container_name} ";
     }
     function kill($container_name) {
         return "docker kill {$container_name}";
@@ -29,7 +29,7 @@ class docker {
     function cleanDangling($force = false) {
         return 'docker rmi ' . ($force ? '-f ' : '') . '$(docker images -f "dangling=true" -q)';
     }
-    function cleanExited() {
+    function cleanExited($force = false) {
         return 'docker rm ' . ($force ? '-f ' : '') . ' $(docker ps --all -q -f status=exited)';
     }
     function push($image) {
