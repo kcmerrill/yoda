@@ -1,4 +1,6 @@
 # Yoda
+
+[![Join the chat at https://gitter.im/kcmerrill/yoda](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/kcmerrill/yoda?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 Let the little green guy do the tedious docker work for you!
 
 ## What is it? 
