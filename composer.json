@@ -1,4 +1,7 @@
 {
+    "config": {
+        "discard-changes": true
+    },  
     "name": "kcmerrill/yoda",
     "description": "Docker made easy. Let the little man do the heavy lifting",
     "require": {
