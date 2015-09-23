@@ -1,4 +1,7 @@
 {
+    "config": {
+        "discard-changes": true
+    },  
     "require": {
         "php": ">=5.3.9",
         "symfony/yaml": "2.8.*@dev",
