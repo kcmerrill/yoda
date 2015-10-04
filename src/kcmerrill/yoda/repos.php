@@ -55,6 +55,6 @@ class repos {
     }
 
     function save() {
-        return $this->config->save('yoda', $this->config->c('yoda.system.root_dir') . DIRECTORY_SEPARATOR . $this->config->c('yoda.system.config_name'));
+        return $this->config->save('yoda', $this->config->c('yoda.system.config_dir') . DIRECTORY_SEPARATOR . $this->config->c('yoda.system.config_name'));
     }
 }

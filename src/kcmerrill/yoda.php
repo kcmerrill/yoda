@@ -87,13 +87,17 @@ class yoda {
     function self_update($env = false) {
         $cwd = getcwd();
         $root_dir = $this->app['config']->c('yoda.system.root_dir');
-        $this->app['shell']->cd($root_dir);
         $this->app['cli']->out('<green>[Yoda]</green> <white>To update I need. herh.</white>');
-        $this->app['shell']->execute('git pull', in_array('--loudly', $this->args));
-        $this->app['shell']->execute('docker run -v $PWD:/app composer/composer update', in_array('--loudly', $this->args));
-        $this->app['shell']->execute('docker run -v $PWD/www:/app composer/composer update', in_array('--loudly', $this->args));
-        $this->app['shell']->cd($cwd);
-        touch($root_dir . '/yoda.last_updated');
+        if(getenv('containerized')) {
+            $this->app['shell']->execute('docker pull kcmerrill/yoda', in_array('--loudly', $this->args));
+        } else {
+            $this->app['shell']->cd($root_dir);
+            $this->app['shell']->execute('git pull', in_array('--loudly', $this->args));
+            $this->app['shell']->execute('docker run -v $PWD:/app composer/composer update', in_array('--loudly', $this->args));
+            $this->app['shell']->execute('docker run -v $PWD/www:/app composer/composer update', in_array('--loudly', $this->args));
+            $this->app['shell']->cd($cwd);
+        }
+        touch($this->app['config']->get('yoda.system.config_dir') . '/yoda.last_updated');
     }
 
     function share($share_as = false) {
@@ -195,7 +199,7 @@ class yoda {
         if(isset($this->args[2]) && isset($this->args[3])) {
             /* meaning we should set the config */
             $this->app['config']->set('yoda.' . $this->args[2], $this->args[3]);
-            if($this->app['config']->save('yoda', $this->app['config']->c('yoda.system.root_dir') . DIRECTORY_SEPARATOR . $this->app['config']->c('yoda.system.config_name'))) {
+            if($this->app['config']->save('yoda', $this->app['config']->c('yoda.system.config_dir') . DIRECTORY_SEPARATOR . $this->app['config']->c('yoda.system.config_name'))) {
                 $this->app['cli']->out('<green>[Yoda]</green> <white>Set '. $this->args[2] .' to ' . $this->args[3] .'</white>');
             } else {
                 throw new \Exception('Save your settings I cannot.');
