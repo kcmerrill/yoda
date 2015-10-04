@@ -1,20 +1,8 @@
-docker-http:
- image: sequenceiq/socat
- pull: true
- p: 2375:2375
- v: /var/run/docker.sock:/var/run/docker.sock
- remove: true
-automagicproxy:
- image: kcmerrill/automagicproxy
- p: 80:80
- remove: true
- notes:
-    - AutomagicProxy is now running on port 80.
-    - More info can be found at https://registry.hub.docker.com/u/kcmerrill/automagicproxy/
 yoda:
   image: kcmerrill/base
   h: ${HOSTNAME}
   P: true
+  p: 1984:80
   v:
    - $PWD:/var/www
   remove: true

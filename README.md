@@ -4,15 +4,24 @@
 
 Let the little green guy do the tedious docker work for you!
 
-## What is it? 
+## What is it?
 Yoda is a command line tool used to interact with docker projects/containers based on Yaml configuration files. There are however some features that yoda does not have that Fig does have, and vice versa.
 
 ## Features
-- Ability to pull, build and run containers and _all_ of their dependencies. 
+- Ability to pull, build and run containers and _all_ of their dependencies.
 - A repository of .yoda files that yoda can grab(and contribute to too!) to get you up and running even quicker!
-- Wraps the CLI interface and relies more heavily on shell, thus making it more customizable. 
+- Wraps the CLI interface and relies more heavily on shell, thus making it more customizable.
 - Functionality for different environments built in(no need for additional config files based on env)
 - A few more!!!
+
+## Experimental Installation ##
+Instead of downloading and installing a php application, yoda is now in a container(and seems to be working?! Need help testing!)
+Create an alias and you should be up and running:
+
+```bash
+alias yoda='docker run --rm -ti -v $HOME/.yoda:/yoda/.config -h=$HOSTNAME -v /var/run/docker.sock:/var/run/docker.sock -v $PWD:$PWD -v $HOME/.ssh:/root/.ssh -v $HOME/.yoda/shares:/yoda/www/share -w $PWD -u=$(id -u $USER) kcmerrill/yoda'
+```
+
 
 ## Installation ##
 1. Clone the yoda project from github
