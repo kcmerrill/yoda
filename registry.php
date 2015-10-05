@@ -37,10 +37,10 @@ $app['events'] = function ($c) {
 };
 
 $app['config'] = function($c) {
-    $config = new kcmerrill\utility\config(__DIR__, true);
+    $config = new kcmerrill\utility\config($_SERVER['HOME'] . '/.yoda/', true);
     $config['yoda.system.root_dir'] = __DIR__;
     $config['yoda.system.config_dir'] = $_SERVER['HOME'] . '/.yoda/';
-    $config['yoda.system.config_name'] = 'config';
+    $config['yoda.system.config_name'] = 'yoda.config';
     $config['yoda.system.initial_working_dir'] = getcwd();
     $config['yoda.speak'] = $config->get('yoda.speak', 'on');
     $config['yoda.args.loudly'] = $config->get('yoda.args.loudly', 'on');
