@@ -92,7 +92,7 @@ class yoda {
             $this->app['shell']->execute('docker pull kcmerrill/yoda', in_array('--loudly', $this->args));
         } else {
             $this->app['shell']->cd($root_dir);
-            $this->app['shell']->execute('git pull', in_array('--loudly', $this->args));
+            $this->app['shell']->execute('git checkout master && git pull', in_array('--loudly', $this->args));
             $this->app['shell']->execute('docker run -v $PWD:/app composer/composer update', in_array('--loudly', $this->args));
             $this->app['shell']->execute('docker run -v $PWD/www:/app composer/composer update', in_array('--loudly', $this->args));
             $this->app['shell']->cd($cwd);

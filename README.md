@@ -5,7 +5,7 @@
 Let the little green guy do the tedious docker work for you!
 
 ## What is it?
-Yoda is a command line tool used to interact with docker projects/containers based on Yaml configuration files. There are however some features that yoda does not have that Fig does have, and vice versa.
+With all of the amazing tools the docker community has created, one of which is incredibly lacking, which is where yoda aims to help fix. That area? The dev enviornment. There are orchestration tools that are amazing for prod, but what if you just want a tool that will volume mount and setup your dev enviornment lickety split? That's where yoda comes in.
 
 ## Features
 - Ability to pull, build and run containers and _all_ of their dependencies.
@@ -19,7 +19,7 @@ Instead of downloading and installing a php application, yoda is now in a contai
 Create an alias and you should be up and running:
 
 ```bash
-alias yoda='docker run --rm -ti -v $HOME/.yoda:/yoda/.config -h=$HOSTNAME -v /var/run/docker.sock:/var/run/docker.sock -v $PWD:$PWD -v $HOME/.ssh:/root/.ssh -v $HOME/.yoda/shares:/yoda/www/share -w $PWD -u=$(id -u $USER) kcmerrill/yoda'
+alias yoda='docker run --rm -ti -v $HOME/.yoda:/yoda/.config -e containerized=true -h=$HOSTNAME -v /var/run/docker.sock:/var/run/docker.sock -v $(dirname $PWD):$(dirname $PWD) -v $HOME/.ssh:/root/.ssh -v $HOME/.yoda/shares:/yoda/www/share -w $PWD -u=$(id -u $USER) kcmerrill/yoda'
 ```
 
 
