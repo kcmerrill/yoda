@@ -41,7 +41,7 @@ yoda
 ## Screencast (Video) ##
 I suppose it's a little long for a "brief" overview, but a brief overview of what Yoda is. How you might be able to leverage it in certain ways and going over a few of it's key features.
 
-[![Yoda Overview](https://raw.githubusercontent.com/kcmerrill/yoda/master/screenshots/yoda_lift_config.png)](https://www.youtube.com/watch?v=jBvG8wOmAdU)
+[![Yoda Overview](http://images.kcmerrill.com/yoda/intro.png)](https://www.youtube.com/watch?v=xY65f2gOTJs)
 
 ## Screenshots ##
 
