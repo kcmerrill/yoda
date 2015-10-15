@@ -4,5 +4,5 @@ printf "FROM kcmerrill/yoda\n\nRUN useradd $(whoami) -u $(id -u $USER)" >> Docke
 docker build -t yodabin .
 alias yoda='docker run --rm -ti --name yodaapp -v $HOME/.ssh:$HOME/.ssh -v $HOME/.yoda/shares:/yoda/www/share -v $HOME/.docker:$HOME/.docker -v $HOME/.yoda:$HOME/.yoda -e containerized=true -h=$HOSTNAME -v /var/run/docker.sock:/var/run/docker.sock -v $(if [ $(dirname $PWD) == "/" ]; then echo $PWD; else dirname $PWD; fi):$(if [ $(dirname $PWD) == "/" ]; then echo $PWD; else dirname $PWD; fi) -w $PWD -u $(id -u $USER) yodabin'
 
-printf "To persist your yoda installation, simply put this into your ~/.bash_profile as an alias\n\n\n"
+printf "To finalize your yoda installation, simply put this into your ~/.bash_profile as an alias\n\n\nalias "
 alias yoda
