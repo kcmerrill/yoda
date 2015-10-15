@@ -1,0 +1,4 @@
+mkdir yoda
+cd yoda
+printf "FROM kcmerrill/yoda\n\nRUN useradd $(whoami) -u $(id -u $USER)" >> Dockerfile
+docker build -t kcmerrill/yoda .
