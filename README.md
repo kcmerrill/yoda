@@ -19,7 +19,8 @@ Instead of downloading and installing a php application, yoda is now in a contai
 Create an alias and you should be up and running:
 
 ```bash
-alias yoda='docker run --rm -ti --name yodaapp -v $HOME/.docker:/root/.docker -v $HOME/.yoda:/root/.yoda -e containerized=true -h=$HOSTNAME -v /var/run/docker.sock:/var/run/docker.sock -v $(if [ $(dirname $PWD) == "/" ]; then echo $PWD; else dirname $PWD; fi):$(if [ $(dirname $PWD) == "/" ]; then echo $PWD; else dirname $PWD; fi) -v $HOME/.ssh:/root/.ssh -v $HOME/.yoda/shares:/yoda/www/share -w $PWD kcmerrill/yoda'
+curl https://raw.githubusercontent.com/kcmerrill/yoda/master/install | sh #ONLY IF YOU ARE NOT THE ROOT USER
+alias yoda='docker run --rm -ti --name yodaapp -v $HOME/.ssh:$HOME/.ssh -v $HOME/.yoda/shares:/yoda/www/share -v $HOME/.docker:$HOME/.docker -v $HOME/.yoda:$HOME/.yoda -e containerized=true -h=$HOSTNAME -v /var/run/docker.sock:/var/run/docker.sock -v $(if [ $(dirname $PWD) == "/" ]; then echo $PWD; else dirname $PWD; fi):$(if [ $(dirname $PWD) == "/" ]; then echo $PWD; else dirname $PWD; fi) -w $PWD -u $(id -u $USER) kcmerrill/yoda'
 ```
 
 
