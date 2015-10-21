@@ -7,7 +7,7 @@ class updater {
 
     function __construct($config) {
         $this->config_dir = $config->c('yoda.system.config_dir');
-        $this->updater_file = $this->config_dir . '/last_updated';
+        $this->updater_file = $this->config_dir . '/yoda.last_updated';
     }
 
     function check(){
