@@ -242,7 +242,12 @@ class yoda {
         $meta->loadConfigFile($this->meta_config, 'meta');
         $original_location = getcwd();
         if(!$this->summoning && $meta->get('meta.project.name', false)) {
-            $this->diff(false, false);
+            /* No need to kill the app if we can't fetch a yoda file */
+            try {
+                $this->diff(false, false);
+            } catch(\Exception $e){
+                $this->app['cli']->out($e->getMessage());
+            }
         }
         $config = $this->app['run_config']->configFileContents($env);
         $to_lift = array();

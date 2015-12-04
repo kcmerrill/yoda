@@ -18,7 +18,10 @@ class docker {
         return "docker pull {$image}";
     }
     function build($image, $dockerfile) {
-        return "docker build -t {$image} {$dockerfile}";
+        $pwd = getcwd();
+        $compose_files = glob('**/docker-compose.yml');
+        /* Use the first one ... If we find a use case, lets re-evaluate this*/
+        return isset($compose_files[0]) ? 'cd ' . dirname($compose_files[0]) . ' && docker-compose build && cd ' . $pwd : "docker build -t {$image} {$dockerfile}";
     }
     function remove($container_name) {
         return "docker rm -f --volumes {$container_name}";
@@ -35,7 +38,18 @@ class docker {
     function push($image) {
         return 'docker push ' . $image;
     }
-    function run($image, $options = array()){
+    function run ($image, $options = array()) {
+        $use_compose = $this->run_compose($image, $options);
+        return $use_compose ? $use_compose : $this->run_yodaized($image, $options);
+    }
+    function run_compose($image, $options) {
+        $pwd = getcwd();
+        $compose_files = glob('**/docker-compose.yml');
+        /* Use the first one ... If we find a use case, lets re-evaluate this*/
+        $compose = 'docker-compose up' . (isset($options['d']) && $options['d'] ? ' -d ' : '');
+        return isset($compose_files[0]) ? 'cd ' . dirname($compose_files[0]) . ' && ' . $compose . ' && cd ' . $pwd : false;
+    }
+    function run_yodaized($image, $options = array()){
         $options = is_array($options) ? $options : array();
         $run_cmd = array('docker run');
         foreach($options as $c=>$value) {
