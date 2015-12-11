@@ -2,7 +2,7 @@
 require __DIR__ . '/vendor/autoload.php';
 
 //TODO: Before committing, uncomment this line
-//error_reporting(0);
+error_reporting(0);
 
 if (!ini_get('date.timezone')){
     date_default_timezone_set('America/Denver');

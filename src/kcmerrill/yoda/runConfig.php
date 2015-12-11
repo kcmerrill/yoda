@@ -90,6 +90,14 @@ class runConfig {
                return $contents;
             }
         }
+
+        /* Try github */
+        $contents = file_get_contents('https://raw.githubusercontent.com/' . $shared . '/master/.yoda');
+        if(!empty($contents)) {
+            return $contents;
+        }
+
+        /* Boo! Something failed! */
         throw new \Exception('It would appear that the project you are summoning could be found not.  Yes, hmmm.');
     }
 
