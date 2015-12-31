@@ -1,5 +1,6 @@
 yoda:
   image: kcmerrill/base
+  pull: true
   h: ${HOSTNAME}
   P: true
   p: 1984:80
