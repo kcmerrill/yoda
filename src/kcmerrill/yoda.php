@@ -431,6 +431,7 @@ class yoda {
                     /* You've updated it is my guess */
                     $this->app['cli']->out('<green>[Yoda]</green> <yellow>Out of date, your configuration file is. With updates you have made. </yellow>');
                     $this->app['cli']->out('<green>[Yoda]</green> <yellow>Use yoda diff to see the changes, made, you have.</yellow>');
+                    sleep(3); //Added a pause, so it gets some recognition :)
                     return false;
                 } else {
                     $this->app['cli']->out('<green>[Yoda]</green> <yellow>Out of date, your configuration file is.  Update it, I will. </yellow>');
