@@ -28,7 +28,7 @@ alias yoda='docker run --rm -ti -v $HOME/.docker:/root/.docker -v $HOME/.yoda:/y
 3. Add yoda to your $PATH
 ```bash
 git clone git@github.com:kcmerrill/yoda.git
-cd yoda/ && ./composer install
+cd yoda/ && docker run --rm -v $(pwd):/app composer/composer install
 sudo ln -s $PWD/yoda /usr/bin/yoda
 ```
 
