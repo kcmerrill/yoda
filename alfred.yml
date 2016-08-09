@@ -11,6 +11,11 @@ version:
     summary: Yoda version
     command: yoda
 
+install:
+    summary: Install yoda from scratch
+    git: clone kcmerrill/yoda yoda
+    tasks: setup
+
 uninstall:
     summary: Uninstall yoda
     command: |
