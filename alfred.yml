@@ -1,0 +1,18 @@
+setup:
+    summary: Setup yoda
+    command: docker run --rm -v $(pwd):/app composer/composer install
+    tasks: symlinks version
+
+symlinks:
+    summary: Setup appropriate symlinks
+    command: sudo ln -s $PWD/yoda /usr/bin/yoda
+
+version:
+    summary: Yoda version
+    command: yoda
+
+uninstall:
+    summary: Uninstall yoda
+    command: |
+        unlink /usr/bin/yoda
+        rm -rf ../${PWD##*/}
