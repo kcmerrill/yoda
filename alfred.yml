@@ -5,7 +5,7 @@ setup:
 
 symlinks:
     summary: Setup appropriate symlinks
-    command: sudo ln -s $PWD/yoda /usr/bin/yoda
+    command: sudo ln -s $PWD/yoda /usr/bin/yoda || true
 
 version:
     summary: Yoda version
