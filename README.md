@@ -4,6 +4,11 @@
 
 Let the little green guy do the tedious docker work for you!
 
+## No longer maintained 
+I am no longer maintaining yoda. It will continue to work, and all public repos will continue to exist but I've since focused my efforts on (Alfred)[https://github.com/kcmerrill/alfred]. While alfred is _not_ a drop in replacement for yoda, it is a much much more robust solution and can offer all(and much more) of the same benifits yoda currently has. 
+
+Having said that, yoda still works and will continue to work for a really long time. If for no other reason, it takes advantage of command line so any new features docker introduces, you'll get automagically with yoda. 
+
 ## What is it?
 With all of the amazing tools the docker community has created, one of which is incredibly lacking, which is where yoda aims to help fix. That area? The dev enviornment. There are orchestration tools that are amazing for prod, but what if you just want a tool that will volume mount and setup your dev enviornment lickety split? That's where yoda comes in.
 
