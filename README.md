@@ -5,7 +5,7 @@
 Let the little green guy do the tedious docker work for you!
 
 ## No longer maintained 
-I am no longer maintaining yoda. It will continue to work, and all public repos will continue to exist but I've since focused my efforts on (Alfred)[https://github.com/kcmerrill/alfred]. While alfred is _not_ a drop in replacement for yoda, it is a much much more robust solution and can offer all(and much more) of the same benifits yoda currently has. 
+I am no longer maintaining yoda. It will continue to work, and all public repos will continue to exist but I've since focused my efforts on [Alfred](https://github.com/kcmerrill/alfred). While alfred is _not_ a drop in replacement for yoda, it is a much much more robust solution and can offer all(and much more) of the same benifits yoda currently has. 
 
 Having said that, yoda still works and will continue to work for a really long time. If for no other reason, it takes advantage of command line so any new features docker introduces, you'll get automagically with yoda. 
 
